@@ -1,4 +1,4 @@
-/* 基础样式 */
+/* popup.css */
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +13,6 @@ body {
   padding: 20px;
 }
 
-/* 顶部栏样式 */
 .top-bar {
   background-color: #333;
   color: #ddd;
@@ -40,7 +39,6 @@ body {
 .title-icon {
   width: 32px;
   height: 32px;
-  vertical-align: middle;
   margin-right: 8px;
 }
 
@@ -65,30 +63,9 @@ body {
   color: white;
   font-size: 1.2rem;
   width: 200px;
+  display: none;
 }
 
-/* 导入导出栏 */
-.import-export-bar {
-  background-color: #e0e0e0;
-  padding: 10px 20px;
-  display: flex;
-  gap: 10px;
-}
-
-.import-export-bar button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  background-color: #4a90e2;
-  color: white;
-  cursor: pointer;
-}
-
-.import-export-bar button:hover {
-  background-color: #3a7bc8;
-}
-
-/* 底部功能栏 */
 .bottom-bar {
   background-color: #333;
   color: #ddd;
@@ -113,7 +90,6 @@ body {
   background-color: #3a7bc8;
 }
 
-/* 书签树样式 */
 ul.accordion-menu, ul.accordion-submenu {
   list-style: none;
   padding: 0;
@@ -121,72 +97,47 @@ ul.accordion-menu, ul.accordion-submenu {
   background-color: white;
 }
 
-.accordion-menu li > a {
+a.menu-item {
   display: block;
-  padding: 8px 20px;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  font-size: 1.2rem;
+  color: #333;
   cursor: pointer;
-  text-decoration: none;
-  font-size: 1rem;
   border-bottom: 1px solid #ddd;
 }
 
-.accordion-menu li.open > a.menu-item {
-  font-weight: bold;
+a.menu-item:hover {
+  background-color: #d0e5ff;
 }
 
 .accordion-submenu {
   display: none;
 }
 
-.accordion-menu li.open > .accordion-submenu {
+li.open > .accordion-submenu {
   display: block;
 }
 
-/* 二级菜单样式 */
-.level-2 > a.menu-item {
-  padding: 10px 20px;
-  background-color: #f0f0f0;
-  border-bottom: 0.5px solid #ddd;
-  font-size: 1.2rem;
-  color: #333;
-}
-
-.level-2 > a.menu-item:hover {
-  background-color: #d0e5ff;
-}
-
-/* 三级菜单样式 */
-.level-3 > a.menu-item {
-  padding: 8px 30px;
-  background-color: white;
-  font-size: 1rem;
-  color: #333;
-}
-
-.level-3 > a.menu-item:hover {
-  background-color: #d0e5ff;
-}
-
-/* 展开菜单栏样式 */
-.level-2.open > a {
+.level-2.open > a.menu-item {
   background-color: #4a90e2;
-  color: #fff;
+  color: white;
 }
 
-.level-3.open > a {
+.level-3.open > a.menu-item {
   background-color: #6ba4e8;
-  color: #fff;
+  color: white;
 }
 
-/* 书签链接样式 */
 a.bookmark-link {
   display: inline-flex;
   align-items: center;
-  background-color: transparent;
+  padding: 8px 20px;
+  font-size: 1rem;
   color: #0156c5;
   text-decoration: none;
-  padding: 4px 0;
   gap: 8px;
+  border-bottom: 1px solid #ddd;
 }
 
 a.bookmark-link:hover {
@@ -196,125 +147,7 @@ a.bookmark-link:hover {
 .favicon-icon {
   width: 16px;
   height: 16px;
-  margin-right: 8px;
-  flex-shrink: 0;
-  vertical-align: middle;
   object-fit: contain;
   border-radius: 8px;
   background: white;
-}
-
-/* 模态框样式 */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 100;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.4);
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 400px;
-  border-radius: 8px;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close:hover {
-  color: black;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.modal-buttons button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#modal-cancel {
-  background-color: #e0e0e0;
-}
-
-#modal-confirm {
-  background-color: #4a90e2;
-  color: white;
-}
-
-/* 响应式设计 */
-@media (max-width: 600px) {
-  .top-bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-  
-  .search-container {
-    justify-content: flex-start;
-  }
-  
-  .search-box {
-    width: 100%;
-  }
-  
-  .bottom-bar {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .bottom-bar button {
-    width: 100%;
-  }
-}
-
-.import-export-bar {
-  background-color: #e0e0e0;
-  padding: 10px 20px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.import-export-bar button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  background-color: #4a90e2;
-  color: white;
-  cursor: pointer;
-  flex-grow: 1;
-}
-
-.import-export-bar button:hover {
-  background-color: #3a7bc8;
-}
-
-@media (max-width: 600px) {
-  .import-export-bar {
-    flex-direction: column;
-  }
-  
-  .import-export-bar button {
-    width: 100%;
-  }
 }
