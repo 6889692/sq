@@ -17,7 +17,7 @@ body {
 }
 
 @media (max-width: 480px) {
-  body {margin: 0;padding: 15px;box-shadow: none;}
+  body {width: 400px;}
 
 /* 顶部栏样式 */
 .top-bar {
