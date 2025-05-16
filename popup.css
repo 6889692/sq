@@ -1,0 +1,256 @@
+/* 框架属性 */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-image: url(icons/bd.jpg);
+  background-attachment: fixed;
+}
+
+body {
+  width: 720px;
+  margin: 0 auto;
+  font-family: sans-serif;
+  background: #f5f5f5;
+}
+
+
+/* 顶部栏样式 */
+.top-bar {
+  background-color: #333;
+  color: #ddd;
+  font-size: 1.6rem;
+  padding: 10px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.top-bar-title {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.title-icon {
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  cursor: pointer;
+  font-size: 1.4rem;
+}
+
+.search-box {
+  display: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: none;
+  background: #444;
+  color: white;
+  font-size: 1.2rem;
+  /* width: 200px; */  /* 移除固定宽度 */
+  flex-grow: 1;         /* 新增：允许扩展 */
+}
+
+.top-bar {
+  background-color: #333;
+  color: #ddd;
+  font-size: 1.6rem;
+  padding: 10px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 480px) {
+  body {
+    width: 300px;
+  }
+
+
+  .top-bar-content {
+    width: 100%; /* 占据整行 */
+    justify-content: center; /* 居中显示标题 */
+  }
+
+  .search-container {
+    width: 100%;
+    justify-content: center; /* 居中显示搜索框 */
+  }
+
+  .search-box {
+    max-width: 90%; /* 小屏幕下搜索框宽度 */
+  }
+}
+
+/* 底部功能栏 - 保持与一级菜单相同样式 */
+.bottom-bar {
+  background-color: #333;
+  color: #ddd;
+  font-size: 1.2rem;
+  padding: 10px 30px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bottom-bar button {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.bottom-bar button:hover {
+  background-color: #444;
+}
+
+/* 列表属性 */
+ul.accordion-menu, ul.accordion-submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.accordion-menu li > a {
+  display: block;
+  padding: 8px 30px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.accordion-menu li.open > a.menu-item {
+  font-weight: bold;
+}
+
+.accordion-submenu {
+  display: none;
+}
+
+.accordion-menu li.open > .accordion-submenu {
+  display: block;
+}
+
+/* 隐藏一级菜单栏但保留其子菜单 */
+.accordion-menu > li.level-1 > a.menu-item {
+  display: none;
+}
+
+.accordion-menu > li.level-1 > .accordion-submenu {
+  display: block;
+  padding-left: 0;
+}
+
+/* 二级菜单样式保持不变 */
+.level-2 > a.menu-item {
+  box-sizing: border-box;
+  padding: 10px 30px;
+  background-color: #ddd;
+  border-bottom: 0.5px solid #bbb;
+  font-size: 1.4rem;
+  color: #333;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+}
+
+.level-2 > a.menu-item:hover {
+  background-color: #99d3fd;
+  color: #b94152;
+}
+
+/* 三级菜单样式保持不变 */
+.level-3 > a.menu-item {
+  padding: 8px 30px;
+  margin: 1px auto;
+  background-color: #ddd;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.level-3 > a.menu-item:hover {
+  background-color: #99d3fd;
+  color: #b94152;
+}
+
+/* 展开菜单栏属性保持不变 */
+.level-2.open > a {
+  background-color: #b94152;
+  color: #fff;
+  padding: 10px 40px;
+}
+
+.level-3.open > a {
+  background-color: #ffc25a;
+  color: #fff;
+  padding: 10px 40px;
+}
+
+/* 书签链接样式保持不变 */
+a.bookmark-link {
+  display: inline-flex;
+  align-items: center;
+  background-color: #f8f8f8;
+  color: #0156c5;
+  text-decoration: none;
+  padding: 4px 8px;
+  gap: 8px;
+}
+
+a.bookmark-link:hover {
+  background-color: #99d3fd;
+  border-bottom: 1px solid #bbb;
+  font-size: 1.3rem;
+  color: #b94152;
+}
+
+#open-full-page {
+  width: 100%;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+#open-full-page:hover {
+  background-color: #0056b3;
+}
+
+.favicon-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 20px;
+  flex-shrink: 0;
+  vertical-align: middle;
+  position: relative;
+  z-index: 10;
+  object-fit: contain;
+  border-radius: 8px;
+  background: white;
+}
