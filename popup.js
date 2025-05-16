@@ -8,12 +8,32 @@ const exportBtn = document.getElementById("export-btn");
 
 let rawJSON = "";
 
-// ✅ 触发上传文件对话框
+// ✅ 页面加载时自动尝试加载远程书签
+window.addEventListener("DOMContentLoaded", async () => {
+  const url = "https://raw.githubusercontent.com/fjvi/bookmark/main/data/bookmarks.json";
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("获取失败");
+
+    const json = await res.json();
+    rawJSON = JSON.stringify(json, null, 2);
+
+    const children = json?.[0]?.children?.[0]?.children || [];
+    bookmarkTree.innerHTML = "";
+    children.forEach(child => {
+      const el = createBookmarkList(child, 2);
+      if (el) bookmarkTree.appendChild(el);
+    });
+  } catch (e) {
+    alert("⚠️ 无法从 GitHub 加载书签，您可以点击“导入书签”手动上传。");
+  }
+});
+
+// ✅ 导入本地 JSON 文件
 importBtn.addEventListener("click", () => {
   fileInput.click();
 });
 
-// 📥 读取并解析 JSON 文件
 fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (!file) return;
@@ -36,7 +56,7 @@ fileInput.addEventListener("change", () => {
   reader.readAsText(file);
 });
 
-// 📂 创建书签列表（支持折叠）
+// 📂 渲染书签树（支持折叠）
 function createBookmarkList(node, level) {
   const li = document.createElement("li");
   li.classList.add(`level-${level}`);
@@ -74,32 +94,25 @@ function createBookmarkList(node, level) {
   return li;
 }
 
-// ✅ 点击折叠逻辑 + 滚动定位
+// ✅ 折叠 + 滚动行为
 function setupFolderClick(li, a) {
   a.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     const isOpen = li.classList.contains("open");
-
-    // 同级关闭
     const siblings = li.parentElement?.children || [];
     Array.from(siblings).forEach((sib) => {
       if (sib !== li) sib.classList.remove("open");
     });
-
     if (isOpen) {
       li.classList.remove("open");
     } else {
       li.classList.add("open");
-
       const liTop = li.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({
         top: liTop,
         behavior: "smooth"
       });
-
-      // 展开所有祖先
       let parent = li.parentElement;
       while (parent && parent.classList.contains("accordion-submenu")) {
         const container = parent.parentElement;
@@ -122,14 +135,12 @@ searchIcon.addEventListener("click", () => {
   searchBox.style.display = "block";
   searchBox.focus();
 });
-
 searchBox.addEventListener("blur", () => {
   if (!searchBox.value) {
     searchBox.style.display = "none";
     searchIcon.style.display = "block";
   }
 });
-
 searchBox.addEventListener("input", () => {
   const keyword = searchBox.value.trim().toLowerCase();
   const links = bookmarkTree.querySelectorAll("a.bookmark-link, a.menu-item");
@@ -139,7 +150,7 @@ searchBox.addEventListener("input", () => {
   });
 });
 
-// 🚀 上传 JSON 到 GitHub（点击时弹出 Token）
+// 🚀 上传书签到 GitHub
 uploadBtn.addEventListener("click", async () => {
   const token = prompt("请输入 GitHub Token：");
   if (!token) return alert("❌ 未提供 Token，上传已取消");
@@ -147,7 +158,6 @@ uploadBtn.addEventListener("click", async () => {
   const repo = "fjvi/bookmark";
   const path = "data/bookmarks.json";
   const branch = "main";
-
   const getURL = `https://api.github.com/repos/${repo}/contents/${path}`;
   let sha = null;
 
@@ -185,7 +195,7 @@ uploadBtn.addEventListener("click", async () => {
   }
 });
 
-// 🧾 导出为 JSON 文件
+// 💾 导出为 JSON 文件
 exportBtn.addEventListener("click", () => {
   if (!rawJSON) return alert("请先导入书签");
 
