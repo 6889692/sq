@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bookmark Viewer</title>
+  <title>Bookmarks</title>
   <link rel="stylesheet" href="main.css" />
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="top-bar-content">
       <div class="top-bar-title">
         <img src="icon.png" class="title-icon" />
-        <span>Bookmark</span>
+        <span>Bookmarks</span>
       </div>
     </div>
     <div class="search-container">
@@ -20,126 +20,16 @@
     </div>
   </div>
 
-  <div style="padding: 10px 20px;">
-    <input type="file" id="bookmark-file" accept=".html" />
-  </div>
+  <ul id="bookmarkTree" class="accordion-menu"></ul>
 
-  <ul class="accordion-menu" id="bookmarkTree"></ul>
-
+  <!-- ✅ 合并的底部操作栏 -->
   <div class="bottom-bar">
+    <button id="import-btn">导入</button>
+    <button id="upload">上传</button>
     <button id="export-btn">导出</button>
+    <input type="file" id="bookmark-file" accept=".json" style="display: none;" />
   </div>
 
-  <script>
-    const fileInput = document.getElementById("bookmark-file");
-    const bookmarkTree = document.getElementById("bookmarkTree");
-    const searchBox = document.querySelector(".search-box");
-    const searchIcon = document.querySelector(".search-icon");
-
-    fileInput.addEventListener("change", () => {
-      const file = fileInput.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const html = e.target.result;
-        const tree = parseBookmarkHTML(html);
-        bookmarkTree.innerHTML = "";
-        if (tree) {
-          bookmarkTree.appendChild(tree);
-          const first = tree.querySelector("li.level-2");
-          if (first) first.classList.add("open");
-        }
-      };
-      reader.readAsText(file);
-    });
-
-    function parseBookmarkHTML(html) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
-      const dl = doc.querySelector("dl");
-      return dl ? buildList(dl, 2) : null;
-    }
-
-    function buildList(dl, level) {
-      const ul = document.createElement("ul");
-      ul.className = level === 2 ? "accordion-menu" : "accordion-submenu";
-
-      const dtList = Array.from(dl.children).filter(el => el.tagName === 'DT');
-      dts.forEach(dt => {
-        const h3 = dt.querySelector("h3");
-        const a = dt.querySelector("a");
-        const li = document.createElement("li");
-        li.classList.add(`level-${level}`);
-
-        if (h3) {
-          const folderLink = document.createElement("a");
-          folderLink.className = "menu-item";
-          folderLink.textContent = h3.textContent;
-          folderLink.href = "javascript:void(0)";
-          folderLink.addEventListener("click", () => {
-            const isOpen = li.classList.contains("open");
-            li.parentElement.querySelectorAll("li.open").forEach(el => el.classList.remove("open"));
-            if (!isOpen) li.classList.add("open");
-          });
-          li.appendChild(folderLink);
-          const next = dt.nextElementSibling;
-          if (next && next.tagName === "DL") {
-            const subList = buildList(next, level + 1);
-            if (subList) li.appendChild(subList);
-          }
-        } else if (a) {
-          const link = document.createElement("a");
-          link.className = "bookmark-link";
-          link.href = a.href;
-          link.textContent = a.textContent;
-          link.target = "_blank";
-
-          const icon = document.createElement("img");
-          icon.className = "favicon-icon";
-          icon.src = `https://www.google.com/s2/favicons?sz=32&domain_url=${encodeURIComponent(a.href)}`;
-          link.prepend(icon);
-
-          li.appendChild(link);
-        }
-
-        ul.appendChild(li);
-      });
-
-      return ul;
-    }
-
-    searchIcon.addEventListener("click", () => {
-      searchIcon.style.display = "none";
-      searchBox.style.display = "block";
-      searchBox.focus();
-    });
-
-    searchBox.addEventListener("blur", () => {
-      if (!searchBox.value) {
-        searchBox.style.display = "none";
-        searchIcon.style.display = "block";
-      }
-    });
-
-    searchBox.addEventListener("input", () => {
-      const keyword = searchBox.value.trim().toLowerCase();
-      const items = bookmarkTree.querySelectorAll("a.menu-item, a.bookmark-link");
-      items.forEach(el => {
-        const visible = el.textContent.toLowerCase().includes(keyword);
-        el.parentElement.style.display = visible ? "" : "none";
-      });
-    });
-
-    document.getElementById("export-btn").addEventListener("click", () => {
-      const html = bookmarkTree.innerHTML;
-      const blob = new Blob([html], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "exported_bookmarks.html";
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-  </script>
+  <script src="popup.js"></script>
 </body>
 </html>
