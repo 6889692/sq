@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>在线书签管理</title>
+  <title>Bookmark</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
       <div class="top-bar-content">
         <div class="top-bar-title">
           <img src="icon.png" class="title-icon">
-          <span>在线书签</span>
+          <span>Bookmark</span>
         </div>
       </div>
       <div class="search-container">
@@ -21,38 +21,159 @@
         <input type="text" class="search-box" placeholder="搜索书签...">
       </div>
     </div>
-    
-    <!-- 导入/导出按钮 -->
-    <div class="import-export-bar">
-      <input type="file" id="import-file" accept=".json,.html" style="display: none;">
-      <button id="import-html-btn">导入HTML</button>
-      <button id="import-json-btn">导入JSON</button>
-      <button id="export-btn">导出JSON</button>
+
+    <!-- 上传按钮 -->
+    <div style="padding: 10px 30px;">
+      <input type="file" id="bookmark-file" accept=".html">
     </div>
-    
+
     <!-- 书签树容器 -->
     <ul class="accordion-menu" id="bookmarkTree"></ul>
-    
+
     <!-- 底部功能栏 -->
     <div class="bottom-bar">
-      <button id="add-folder-btn">新建文件夹</button>
-      <button id="add-bookmark-btn">添加书签</button>
-    </div>
-    
-    <!-- 添加书签/文件夹的模态框 -->
-    <div id="modal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h3 id="modal-title">添加新项目</h3>
-        <input type="text" id="item-name" placeholder="名称">
-        <input type="text" id="item-url" placeholder="URL (仅书签需要)" style="display: none;">
-        <div class="modal-buttons">
-          <button id="modal-cancel">取消</button>
-          <button id="modal-confirm">确认</button>
-        </div>
-      </div>
+      <button id="export-btn">导出</button>
     </div>
   </div>
-  <script src="popup.js"></script>
+  <script>
+    const bookmarkTree = document.getElementById("bookmarkTree");
+    const fileInput = document.getElementById("bookmark-file");
+    const searchBox = document.querySelector(".search-box");
+    const searchIcon = document.querySelector(".search-icon");
+    const topBarTitle = document.querySelector(".top-bar-title");
+
+    let allBookmarks = [];
+
+    function renderBookmarks(bookmarks) {
+      bookmarkTree.innerHTML = "";
+      const ul = document.createElement("ul");
+      ul.className = "accordion-menu";
+
+      bookmarks.forEach(item => {
+        const li = document.createElement("li");
+        li.classList.add("level-2");
+        const a = document.createElement("a");
+        a.classList.add("bookmark-link");
+        a.href = item.url;
+        a.target = "_blank";
+        a.textContent = item.title;
+        const favicon = document.createElement("img");
+        favicon.src = `https://www.google.com/s2/favicons?sz=32&domain_url=${encodeURIComponent(item.url)}`;
+        favicon.className = "favicon-icon";
+        a.prepend(favicon);
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+
+      bookmarkTree.appendChild(ul);
+    }
+
+    function extractBookmarksFromHTML(html) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const bookmarks = [];
+
+      function traverse(dl, level = 2) {
+        const ul = document.createElement("ul");
+        ul.className = level === 2 ? "accordion-menu" : "accordion-submenu";
+
+        const dtList = dl.querySelectorAll(':scope > dt');
+        dtList.forEach(dt => {
+          const a = dt.querySelector('a');
+          const h3 = dt.querySelector('h3');
+          const li = document.createElement("li");
+          li.classList.add(`level-${level}`);
+
+          if (h3) {
+            const aElem = document.createElement("a");
+            aElem.textContent = h3.textContent;
+            aElem.classList.add("menu-item");
+            aElem.addEventListener("click", (e) => {
+              e.stopPropagation();
+              const isOpen = li.classList.contains("open");
+              const siblings = li.parentElement.children;
+              Array.from(siblings).forEach((sib) => sib !== li && sib.classList.remove("open"));
+              li.classList.toggle("open", !isOpen);
+            });
+            li.appendChild(aElem);
+
+            const nextDl = dt.nextElementSibling;
+            if (nextDl && nextDl.tagName === 'DL') {
+              const subUl = traverse(nextDl, level + 1);
+              if (subUl) li.appendChild(subUl);
+            }
+          } else if (a) {
+            const aElem = document.createElement("a");
+            aElem.href = a.href;
+            aElem.textContent = a.textContent;
+            aElem.target = "_blank";
+            aElem.classList.add("bookmark-link");
+            const favicon = document.createElement("img");
+            favicon.src = `https://www.google.com/s2/favicons?sz=32&domain_url=${encodeURIComponent(a.href)}`;
+            favicon.className = "favicon-icon";
+            aElem.prepend(favicon);
+            li.appendChild(aElem);
+          }
+          ul.appendChild(li);
+        });
+
+        return ul;
+      }
+
+      const dl = doc.querySelector("dl");
+      return dl ? traverse(dl) : null;
+    }
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const html = e.target.result;
+        const tree = extractBookmarksFromHTML(html);
+        bookmarkTree.innerHTML = "";
+        if (tree) bookmarkTree.appendChild(tree);
+      };
+      reader.readAsText(file);
+    });
+
+    searchIcon.addEventListener("click", () => {
+      searchIcon.style.display = "none";
+      searchBox.style.display = "block";
+      searchBox.focus();
+    });
+
+    searchBox.addEventListener("blur", () => {
+      if (!searchBox.value) {
+        searchBox.style.display = "none";
+        searchIcon.style.display = "block";
+      }
+    });
+
+    searchBox.addEventListener("input", () => {
+      const keyword = searchBox.value.trim().toLowerCase();
+      if (!keyword) {
+        const event = new Event("change");
+        fileInput.dispatchEvent(event); // 重新加载全部
+        return;
+      }
+      const links = bookmarkTree.querySelectorAll("a.bookmark-link");
+      links.forEach(link => {
+        const match = link.textContent.toLowerCase().includes(keyword);
+        link.parentElement.style.display = match ? "" : "none";
+      });
+    });
+
+    document.getElementById("export-btn").addEventListener("click", () => {
+      const html = bookmarkTree.innerHTML;
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "exported_bookmarks.html";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
 </body>
 </html>
