@@ -64,7 +64,7 @@
       const ul = document.createElement("ul");
       ul.className = level === 2 ? "accordion-menu" : "accordion-submenu";
 
-      const dts = dl.querySelectorAll(":scope > dt");
+      const dtList = Array.from(dl.children).filter(el => el.tagName === 'DT');
       dts.forEach(dt => {
         const h3 = dt.querySelector("h3");
         const a = dt.querySelector("a");
