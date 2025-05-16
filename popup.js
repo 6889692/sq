@@ -10,7 +10,7 @@ let rawJSON = "";
 
 // ✅ 页面加载时自动尝试加载远程书签
 window.addEventListener("DOMContentLoaded", async () => {
-  const url = "https://raw.githubusercontent.com/fjvi/bookmark/main/data/bookmarks.json";
+  const url = "data/bookmarks.json";
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error("获取失败");
