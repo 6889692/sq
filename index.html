@@ -1,45 +1,58 @@
 <!DOCTYPE html>
 <html lang="zh">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web 书签</title>
-    <link rel="stylesheet" href="web-bookmark.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在线书签管理</title>
+  <link rel="stylesheet" href="popup.css">
 </head>
-
 <body>
-    <div id="container">
-        <div class="top-bar">
-            <div class="top-bar-content">
-                <div class="top-bar-title">
-                    <img src="icons/icon16.png" class="title-icon">
-                    <span>Web 书签</span>
-                </div>
-            </div>
-            <div class="search-container">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-box" placeholder="搜索书签...">
-            </div>
+  <div id="container">
+    <!-- 顶部功能栏 -->
+    <div class="top-bar">
+      <div class="top-bar-content">
+        <div class="top-bar-title">
+          <img src="icon.png" class="title-icon">
+          <span>在线书签</span>
         </div>
-
-        <div id="add-bookmark-form">
-            <h2>添加书签</h2>
-            <label for="new-title">标题:</label>
-            <input type="text" id="new-title" placeholder="书签标题">
-            <label for="new-url">URL:</label>
-            <input type="text" id="new-url" placeholder="书签 URL">
-            <button id="add-btn">添加</button>
-        </div>
-
-        <ul class="accordion-menu" id="bookmarkTree"></ul>
-
-        <div class="bottom-bar">
-            <button id="export-btn">导出书签</button>
-            <button id="import-btn">导入书签</button>
-        </div>
+      </div>
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-box" placeholder="搜索书签...">
+      </div>
     </div>
-    <script src="web-bookmark.js"></script>
+    
+    <!-- 导入/导出按钮 -->
+    <div class="import-export-bar">
+      <input type="file" id="import-file" accept=".json,.html" style="display: none;">
+      <button id="import-html-btn">导入HTML</button>
+      <button id="import-json-btn">导入JSON</button>
+      <button id="export-btn">导出JSON</button>
+    </div>
+    
+    <!-- 书签树容器 -->
+    <ul class="accordion-menu" id="bookmarkTree"></ul>
+    
+    <!-- 底部功能栏 -->
+    <div class="bottom-bar">
+      <button id="add-folder-btn">新建文件夹</button>
+      <button id="add-bookmark-btn">添加书签</button>
+    </div>
+    
+    <!-- 添加书签/文件夹的模态框 -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3 id="modal-title">添加新项目</h3>
+        <input type="text" id="item-name" placeholder="名称">
+        <input type="text" id="item-url" placeholder="URL (仅书签需要)" style="display: none;">
+        <div class="modal-buttons">
+          <button id="modal-cancel">取消</button>
+          <button id="modal-confirm">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
 </body>
-
 </html>
