@@ -54,7 +54,11 @@ body {
   cursor: pointer;
   display: var(--title-display, flex); /* 使用 CSS 变量 */
 }
-
+@media (max-width: 480px) {
+  .top-bar.searching .top-bar-content .top-bar-title span {
+    display: none !important; /* 使用 !important */
+  }
+}
 .search-container {
   display: flex;
   align-items: center;
@@ -74,7 +78,7 @@ body {
   background: #444;
   color: white;
   font-size: 1.2rem;
-  width: 300px;
+  width: 280px;
   margin:auto 10px;
   flex-grow: 1;  /* 新增：允许扩展 */
 }
@@ -103,7 +107,7 @@ body {
   background-color: #444;
 }
 
-/* 列表属性 */
+/* 栏目属性 */
 ul.accordion-menu,
 ul.accordion-submenu,
 ul.search-results { /* 新增搜索结果列表样式 */
@@ -143,7 +147,7 @@ ul.search-results { /* 新增搜索结果列表样式 */
   padding-left: 0;
 }
 
-/* 二级菜单样式保持不变 */
+/* 二级菜单 */
 .level-2 > a.menu-item {
   box-sizing: border-box;
   padding: 10px 30px;
@@ -162,7 +166,7 @@ ul.search-results { /* 新增搜索结果列表样式 */
   color: #b94152;
 }
 
-/* 三级菜单样式保持不变 */
+/* 三级菜单 */
 .level-3 > a.menu-item {
   padding: 8px 30px;
   margin: 1px auto;
@@ -175,7 +179,7 @@ ul.search-results { /* 新增搜索结果列表样式 */
   background-color: #99d3fd;
   color: #b94152;
 }
-/* 三级菜单样式保持不变 */
+/* 四级菜单 */
 .level-4 > a.menu-item {
   padding: 8px 30px;
   margin: 1px auto;
@@ -188,7 +192,7 @@ ul.search-results { /* 新增搜索结果列表样式 */
   background-color: #99d3fd;
   color: #b94152;
 }
-/* 展开菜单栏属性保持不变 */
+/* 展开菜单栏属性 */
 .level-2.open > a {
   background-color: #b94152;
   color: #fff;
@@ -206,7 +210,7 @@ ul.search-results { /* 新增搜索结果列表样式 */
   padding: 10px 40px;
 }
 
-/* 书签链接样式保持不变 */
+/* 书签链接样式 */
 a.bookmark-link {
   display: inline-flex;
   align-items: center;
