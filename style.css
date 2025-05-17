@@ -121,10 +121,10 @@ body {
     .top-bar.searching .top-bar-content .top-bar-title span {
         display: none !important;
         /* 使用 !important */
+    }
 .search-box {
     width: 200px;
 }
-    }
 }
 
 .search-container {
