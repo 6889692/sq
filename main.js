@@ -72,46 +72,39 @@ const FaviconLoader = {
 
 // 📂 渲染书签树
 function createBookmarkList(node, level) {
-    const li = document.createElement("li");
-    li.classList.add(`level-${level}`);
+  const li = document.createElement("li");
+  li.classList.add(`level-${level}`);
 
-    if (node.children && node.children.length > 0) {
-        li.classList.add("folder");
+  if (node.children && node.children.length > 0) {
+    li.classList.add("folder");
 
-        const a = document.createElement("a");
-        a.href = "javascript:void(0);";
-        a.classList.add("menu-item");
-        a.textContent = node.title || "(未命名)";
-        li.appendChild(a);
+    const a = document.createElement("a");
+    a.href = "javascript:void(0);";
+    a.classList.add("menu-item");
+    a.textContent = node.title || "(未命名)";
+    li.appendChild(a);
 
-        const ul = document.createElement("ul");
-        ul.classList.add("accordion-submenu");
-        node.children.forEach(child => {
-            const childEl = createBookmarkList(child, level + 1);
-            if (childEl) ul.appendChild(childEl);
-        });
-        li.appendChild(ul);
-    } else if (node.url) {
-        const a = document.createElement("a");
-        a.href = node.url;
-        a.classList.add("bookmark-link");
-        a.target = "_blank";
-        a.textContent = node.title || "(无标题)";
-        const icon = document.createElement("img");
-        icon.classList.add("favicon-icon");
-        a.prepend(icon);
-        li.appendChild(a);
+    const ul = document.createElement("ul");
+    ul.classList.add("accordion-submenu");
+    node.children.forEach(child => {
+      const childEl = createBookmarkList(child, level + 1);
+      if (childEl) ul.appendChild(childEl);
+    });
+    li.appendChild(ul);
+  } else if (node.url) {
+    const a = document.createElement("a");
+    a.href = node.url;
+    a.classList.add("bookmark-link");
+    a.target = "_blank";
+    a.textContent = node.title || "(无标题)";
+    const icon = document.createElement("img");
+    icon.src = FaviconLoader.getFaviconUrl(node.url); // 使用 getFaviconUrl
+    icon.classList.add("favicon-icon");
+    a.prepend(icon);
+    li.appendChild(a);
+  }
 
-        // 延迟设置 src
-        setTimeout(() => {
-            icon.src = FaviconLoader.getFaviconUrl(node.url);
-            icon.onerror = () => {
-                icon.src = FaviconLoader.DEFAULT_FAVICON || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACAkQBADs=";
-            };
-        }, 0);
-    }
-
-    return li;
+  return li;
 }
 
 // ✅ 折叠 + 滚动行为
