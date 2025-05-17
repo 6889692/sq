@@ -5,58 +5,33 @@ const searchBox = document.querySelector(".search-box");
 const searchIcon = document.querySelector(".search-icon");
 const uploadBtn = document.getElementById("upload");
 const exportBtn = document.getElementById("export-btn");
+const topBarContent = document.querySelector(".top-bar-content");
 
 let rawJSON = "";
+let allNodes = [];
+let originalBookmarkTreeHTML = ""; // 保存原始书签树的 HTML
 
-// ✅ 页面加载时自动尝试加载远程书签
-window.addEventListener("DOMContentLoaded", async () => {
-  const url = "data/bookmarks.json";
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("获取失败");
+// 预处理书签数据
+function flattenNodes(nodes, level) {
+  const results = [];
+  if (!nodes) return results;
 
-    const json = await res.json();
-    rawJSON = JSON.stringify(json, null, 2);
-
-    const children = json?.[0]?.children?.[0]?.children || [];
-    bookmarkTree.innerHTML = "";
-    children.forEach(child => {
-      const el = createBookmarkList(child, 2);
-      if (el) bookmarkTree.appendChild(el);
-    });
-  } catch (e) {
-    alert("⚠️ 无法从 GitHub 加载书签，您可以点击“导入书签”手动上传。");
-  }
-});
-
-// ✅ 导入本地 JSON 文件
-importBtn.addEventListener("click", () => {
-  fileInput.click();
-});
-
-fileInput.addEventListener("change", () => {
-  const file = fileInput.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const json = e.target.result;
-    rawJSON = json;
-    try {
-      const data = JSON.parse(json);
-      const children = data?.[0]?.children?.[0]?.children || [];
-      bookmarkTree.innerHTML = "";
-      children.forEach(child => {
-        const el = createBookmarkList(child, 2);
-        if (el) bookmarkTree.appendChild(el);
-      });
-    } catch (e) {
-      alert("无效 JSON");
+  nodes.forEach(node => {
+    const flatNode = {
+      title: node.title || "(未命名)",
+      level,
+      originalNode: node
+    };
+    results.push(flatNode);
+    if (node.children) {
+      results.push(...flattenNodes(node.children, level + 1));
     }
-  };
-  reader.readAsText(file);
-});
+  });
 
-// 📂 渲染书签树（支持折叠）
+  return results;
+}
+
+// 渲染书签树
 function createBookmarkList(node, level) {
   const li = document.createElement("li");
   li.classList.add(`level-${level}`);
@@ -94,14 +69,14 @@ function createBookmarkList(node, level) {
   return li;
 }
 
-// ✅ 折叠 + 滚动行为
+// 设置文件夹点击事件
 function setupFolderClick(li, a) {
-  a.addEventListener("click", (e) => {
+  a.addEventListener("click", e => {
     e.preventDefault();
     e.stopPropagation();
     const isOpen = li.classList.contains("open");
     const siblings = li.parentElement?.children || [];
-    Array.from(siblings).forEach((sib) => {
+    Array.from(siblings).forEach(sib => {
       if (sib !== li) sib.classList.remove("open");
     });
     if (isOpen) {
@@ -129,28 +104,126 @@ function setupFolderClick(li, a) {
   });
 }
 
-// 🔍 搜索
-searchIcon.addEventListener("click", () => {
-  searchIcon.style.display = "none";
-  searchBox.style.display = "block";
-  searchBox.focus();
-});
-searchBox.addEventListener("blur", () => {
-  if (!searchBox.value) {
-    searchBox.style.display = "none";
-    searchIcon.style.display = "block";
+// 初始化
+window.addEventListener("DOMContentLoaded", async () => {
+  const url = "data/bookmarks.json";
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("获取失败");
+
+    const json = await res.json();
+    rawJSON = JSON.stringify(json, null, 2);
+
+    const children = json?.[0]?.children?.[0]?.children || [];
+    children.forEach(child => {
+      const el = createBookmarkList(child, 2);
+      if (el) bookmarkTree.appendChild(el);
+    });
+
+    allNodes = flattenNodes(children, 2).filter(node => node.level === 3);
+    originalBookmarkTreeHTML = bookmarkTree.innerHTML; // 保存原始 HTML
+
+    // 点击顶部栏恢复原始状态
+    topBarContent.addEventListener("click", () => {
+      searchBox.value = "";
+      searchBox.style.display = "none";
+      searchIcon.style.display = "block";
+      bookmarkTree.innerHTML = originalBookmarkTreeHTML; // 恢复原始 HTML
+      const openMenuItems = document.querySelectorAll(".open");
+      openMenuItems.forEach(item => item.classList.remove("open"));
+
+      // 重新绑定事件 (确保文件夹点击事件有效)
+      const folderLinks = bookmarkTree.querySelectorAll(".folder > a");
+      folderLinks.forEach(link => {
+        const li = link.parentElement;
+        setupFolderClick(li, link);
+      });
+    });
+
+  } catch (e) {
+    alert("⚠️ 无法从 GitHub 加载书签，您可以点击“导入书签”手动上传。");
   }
-});
-searchBox.addEventListener("input", () => {
-  const keyword = searchBox.value.trim().toLowerCase();
-  const links = bookmarkTree.querySelectorAll("a.bookmark-link, a.menu-item");
-  links.forEach(link => {
-    const match = link.textContent.toLowerCase().includes(keyword);
-    link.parentElement.style.display = match ? "" : "none";
+
+  // 搜索框事件
+  searchIcon.addEventListener("click", () => {
+    searchIcon.style.display = "none";
+    searchBox.style.display = "block";
+    searchBox.focus();
+  });
+
+  searchBox.addEventListener("blur", () => {
+    if (!searchBox.value) {
+      searchBox.style.display = "none";
+      searchIcon.style.display = "block";
+    }
+  });
+
+  searchBox.addEventListener("input", () => {
+    const keyword = searchBox.value.trim().toLowerCase();
+    const resultsContainer = document.createElement("ul");
+    resultsContainer.classList.add("search-results");
+    bookmarkTree.innerHTML = ""; // 清空书签列表
+
+    if (keyword) {
+      const regex = new RegExp(keyword, "gi");
+      const results = allNodes.filter(node => node.title.toLowerCase().includes(keyword));
+
+      results.forEach(result => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = result.originalNode.url;
+        a.classList.add("bookmark-link");
+        a.target = "_blank";
+
+        const highlightedTitle = result.title.replace(regex, `<mark>$&</mark>`);
+        a.innerHTML = highlightedTitle;
+
+        const icon = document.createElement("img");
+        icon.src = "https://www.google.com/s2/favicons?sz=32&domain_url=" + encodeURIComponent(result.originalNode.url);
+        icon.classList.add("favicon-icon");
+        a.prepend(icon);
+
+        li.appendChild(a);
+        resultsContainer.appendChild(li);
+      });
+
+      bookmarkTree.appendChild(resultsContainer);
+    } else {
+      bookmarkTree.innerHTML = originalBookmarkTreeHTML; // 恢复原始 HTML
+    }
   });
 });
 
-// 🚀 上传书签到 GitHub
+// 导入 JSON
+importBtn.addEventListener("click", () => {
+  fileInput.click();
+});
+
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const json = e.target.result;
+    rawJSON = json;
+    try {
+      const data = JSON.parse(json);
+      const children = data?.[0]?.children?.[0]?.children || [];
+      bookmarkTree.innerHTML = "";
+      children.forEach(child => {
+        const el = createBookmarkList(child, 2);
+        if (el) bookmarkTree.appendChild(el);
+      });
+      allNodes = flattenNodes(children, 2).filter(node => node.level === 3);
+      originalBookmarkTreeHTML = bookmarkTree.innerHTML; // 保存原始 HTML
+    } catch (e) {
+      alert("无效 JSON");
+    }
+  };
+  reader.readAsText(file);
+});
+
+// 上传到 GitHub
 uploadBtn.addEventListener("click", async () => {
   const token = prompt("请输入 GitHub Token：");
   if (!token) return alert("❌ 未提供 Token，上传已取消");
@@ -195,7 +268,7 @@ uploadBtn.addEventListener("click", async () => {
   }
 });
 
-// 💾 导出为 JSON 文件
+// 导出 JSON
 exportBtn.addEventListener("click", () => {
   if (!rawJSON) return alert("请先导入书签");
 
