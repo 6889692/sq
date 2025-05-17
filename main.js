@@ -1,232 +1,451 @@
-const fileInput = document.getElementById("bookmark-file");
-const importBtn = document.getElementById("import-btn");
-const bookmarkTree = document.getElementById("bookmarkTree");
-const searchBox = document.querySelector(".search-box");
-const searchIcon = document.querySelector(".search-icon");
-const uploadBtn = document.getElementById("upload");
-const exportBtn = document.getElementById("export-btn");
-const topBarContent = document.querySelector(".top-bar-content");
+/**
+ * @typedef {object} BookmarkNode
+ * @property {string} [title]
+ * @property {string} [url]
+ * @property {BookmarkNode[]} [children]
+ */
 
+/**
+ * @typedef {object} FlatBookmarkNode
+ * @property {string} title
+ * @property {string} [url]
+ * @property {number} level
+ * @property {BookmarkNode} originalNode
+ */
+
+// --- DOM 元素引用 ---
+const elements = {
+  fileInput: document.getElementById("bookmark-file"),
+  importBtn: document.getElementById("import-btn"),
+  bookmarkTree: document.getElementById("bookmarkTree"),
+  searchBox: document.querySelector(".search-box"),
+  searchIcon: document.querySelector(".search-icon"),
+  uploadBtn: document.getElementById("upload"),
+  exportBtn: document.getElementById("export-btn"),
+  topBar: document.querySelector(".top-bar"),
+  titleText: document.querySelector(".top-bar-title span"),
+  topBarTitle: document.querySelector(".top-bar-title"),
+};
+
+// --- 全局状态 ---
 let rawJSON = "";
+/** @type {FlatBookmarkNode[]} */
 let allNodes = [];
-let originalBookmarkTreeHTML = ""; // 保存原始书签树的 HTML
+let originalBookmarkTreeHTML = "";
+let observer = null;
+let bindEventsTimeout = null;
 
-// 预处理书签数据
-function flattenNodes(nodes, level) {
-  const results = [];
-  if (!nodes) return results;
+// --- 实用工具函数 ---
 
-  nodes.forEach(node => {
+/**
+ * 创建一个 DOM 元素。
+ * @param {string} tag
+ * @param {object} [options]
+ * @param {string[]} [options.classes]
+ * @param {object<string, string>} [options.attributes]
+ * @returns {HTMLElement}
+ */
+const createElement = (tag, options = {}) => {
+  const { classes = [], attributes = {} } = options;
+  const element = document.createElement(tag);
+  classes.forEach((cls) => element.classList.add(cls));
+  Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+  return element;
+};
+
+/**
+ * 防抖函数。
+ * @param {Function} func
+ * @param {number} delay
+ * @returns {Function}
+ */
+const debounce = (func, delay) => {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+};
+
+/**
+ * 显示消息。
+ * @param {string} message
+ */
+const showMessage = (message) => {
+  alert(message);
+};
+
+/**
+ * 处理错误。
+ * @param {Error|string} error
+ */
+const handleError = (error) => {
+  console.error(error);
+  showMessage("发生错误：" + (error.message || error));
+};
+
+// --- 数据处理函数 ---
+
+/**
+ * 扁平化书签节点。
+ * @param {BookmarkNode[]} nodes
+ * @param {number} level
+ * @returns {FlatBookmarkNode[]}
+ */
+const flattenNodes = (nodes, level) => {
+  if (!nodes) return [];
+
+  return nodes.reduce((acc, node) => {
+    /** @type {FlatBookmarkNode} */
     const flatNode = {
       title: node.title || "(未命名)",
+      url: node.url,
       level,
-      originalNode: node
+      originalNode: node,
     };
-    results.push(flatNode);
-    if (node.children) {
-      results.push(...flattenNodes(node.children, level + 1));
-    }
-  });
+    return acc.concat(flatNode, flattenNodes(node.children, level + 1));
+  }, []);
+};
 
-  return results;
-}
-
-// 渲染书签树
-function createBookmarkList(node, level) {
-  const li = document.createElement("li");
-  li.classList.add(`level-${level}`);
+/**
+ * 创建书签列表项。
+ * @param {BookmarkNode} node
+ * @param {number} level
+ * @returns {HTMLLIElement}
+ */
+const createBookmarkListItem = (node, level) => {
+  const li = createElement("li", { classes: [`level-${level}`] });
 
   if (node.children && node.children.length > 0) {
     li.classList.add("folder");
-
-    const a = document.createElement("a");
-    a.href = "javascript:void(0);";
-    a.classList.add("menu-item");
+    const a = createElement("a", {
+      classes: ["menu-item"],
+      attributes: { href: "javascript:void(0);" },
+    });
     a.textContent = node.title || "(未命名)";
-    setupFolderClick(li, a);
     li.appendChild(a);
 
-    const ul = document.createElement("ul");
-    ul.classList.add("accordion-submenu");
-    node.children.forEach(child => {
-      const childEl = createBookmarkList(child, level + 1);
+    const ul = createElement("ul", { classes: ["accordion-submenu"] });
+    node.children.forEach((child) => {
+      const childEl = createBookmarkListItem(child, level + 1);
       if (childEl) ul.appendChild(childEl);
     });
     li.appendChild(ul);
   } else if (node.url) {
-    const a = document.createElement("a");
-    a.href = node.url;
-    a.classList.add("bookmark-link");
-    a.target = "_blank";
+    const a = createElement("a", {
+      classes: ["bookmark-link"],
+      attributes: { href: node.url, target: "_blank" },
+    });
     a.textContent = node.title || "(无标题)";
-    const icon = document.createElement("img");
-    icon.src = "https://www.google.com/s2/favicons?sz=32&domain_url=" + encodeURIComponent(node.url);
-    icon.classList.add("favicon-icon");
+
+    const icon = createElement("img", {
+      classes: ["favicon-icon"],
+      attributes: {
+        src: getFaviconUrl(node.url), // 获取 favicon URL
+        alt: "",
+      },
+    });
+
     a.prepend(icon);
     li.appendChild(a);
   }
 
   return li;
-}
+};
 
-// 设置文件夹点击事件
-function setupFolderClick(li, a) {
-  a.addEventListener("click", e => {
-    e.preventDefault();
-    e.stopPropagation();
-    const isOpen = li.classList.contains("open");
-    const siblings = li.parentElement?.children || [];
-    Array.from(siblings).forEach(sib => {
-      if (sib !== li) sib.classList.remove("open");
-    });
-    if (isOpen) {
-      li.classList.remove("open");
-    } else {
-      li.classList.add("open");
-      const liTop = li.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({
-        top: liTop,
-        behavior: "smooth"
-      });
-      let parent = li.parentElement;
-      while (parent && parent.classList.contains("accordion-submenu")) {
-        const container = parent.parentElement;
-        if (container) {
-          container.classList.add("open");
-          const ancestorSiblings = container.parentElement?.children || [];
-          Array.from(ancestorSiblings).forEach(sib => {
-            if (sib !== container) sib.classList.remove("open");
-          });
-        }
-        parent = parent.parentElement?.parentElement;
-      }
-    }
-  });
-}
+const FAVICON_CACHE_PREFIX = "favicon_";
+const BACKUP_FAVICON_URL = "https://api.faviconkit.com/";  // 替换为你的备用 favicon 服务
 
-// 初始化
-window.addEventListener("DOMContentLoaded", async () => {
-  const url = "data/bookmarks.json";
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("获取失败");
+/**
+ * 获取 favicon URL，优先从本地缓存获取，否则从网络获取。
+ * @param {string} url - 链接 URL
+ * @returns {string} favicon URL
+ */
+function getFaviconUrl(url) {
+  if (!url) return "";
 
-    const json = await res.json();
-    rawJSON = JSON.stringify(json, null, 2);
+  const domain = new URL(url).hostname;
+  const cachedUrl = localStorage.getItem(FAVICON_CACHE_PREFIX + domain);
 
-    const children = json?.[0]?.children?.[0]?.children || [];
-    children.forEach(child => {
-      const el = createBookmarkList(child, 2);
-      if (el) bookmarkTree.appendChild(el);
-    });
-
-    allNodes = flattenNodes(children, 2).filter(node => node.level === 3);
-    originalBookmarkTreeHTML = bookmarkTree.innerHTML; // 保存原始 HTML
-
-    // 点击顶部栏恢复原始状态
-    topBarContent.addEventListener("click", () => {
-      searchBox.value = "";
-      searchBox.style.display = "none";
-      searchIcon.style.display = "block";
-      bookmarkTree.innerHTML = originalBookmarkTreeHTML; // 恢复原始 HTML
-      const openMenuItems = document.querySelectorAll(".open");
-      openMenuItems.forEach(item => item.classList.remove("open"));
-
-      // 重新绑定事件 (确保文件夹点击事件有效)
-      const folderLinks = bookmarkTree.querySelectorAll(".folder > a");
-      folderLinks.forEach(link => {
-        const li = link.parentElement;
-        setupFolderClick(li, link);
-      });
-    });
-
-  } catch (e) {
-    alert("⚠️ 无法从 GitHub 加载书签，您可以点击“导入书签”手动上传。");
+  if (cachedUrl) {
+    return cachedUrl;
   }
 
-  // 搜索框事件
-  searchIcon.addEventListener("click", () => {
-    searchIcon.style.display = "none";
-    searchBox.style.display = "block";
-    searchBox.focus();
-  });
+  const faviconUrl = `https://www.google.com/s2/favicons?sz=32&domain_url=${encodeURIComponent(url)}`;
 
-  searchBox.addEventListener("blur", () => {
-    if (!searchBox.value) {
-      searchBox.style.display = "none";
-      searchIcon.style.display = "block";
+  // 尝试加载 favicon，如果失败则使用备用地址
+  const img = new Image();
+  img.onload = () => {
+    localStorage.setItem(FAVICON_CACHE_PREFIX + domain, faviconUrl);
+  };
+  img.onerror = () => {
+    if (BACKUP_FAVICON_URL) {
+      img.src = BACKUP_FAVICON_URL + domain; // 尝试备用地址
     }
+  };
+  img.src = faviconUrl;
+
+  return faviconUrl;
+};
+
+/**
+ * 渲染书签树。
+ * @param {BookmarkNode[]} bookmarks
+ * @param {HTMLElement} target
+ */
+const renderBookmarkTree = (bookmarks, target) => {
+  if (!target) return;
+
+  const fragment = document.createDocumentFragment();
+  bookmarks.forEach((bookmark) => {
+    const el = createBookmarkListItem(bookmark, 2);
+    if (el) fragment.appendChild(el);
   });
+  target.innerHTML = "";
+  target.appendChild(fragment);
+};
 
-  searchBox.addEventListener("input", () => {
-    const keyword = searchBox.value.trim().toLowerCase();
-    const resultsContainer = document.createElement("ul");
-    resultsContainer.classList.add("search-results");
-    bookmarkTree.innerHTML = ""; // 清空书签列表
+// --- 事件处理函数 ---
 
-    if (keyword) {
-      const regex = new RegExp(keyword, "gi");
-      const results = allNodes.filter(node => node.title.toLowerCase().includes(keyword));
+/**
+ * 处理文件夹点击。
+ * @param {MouseEvent} e
+ */
+const handleFolderClick = (e) => {
+  const target = /** @type {HTMLElement} */ (e.target); // 类型断言
+  if (!target.classList.contains("menu-item")) return;
 
-      results.forEach(result => {
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.href = result.originalNode.url;
-        a.classList.add("bookmark-link");
-        a.target = "_blank";
+  e.preventDefault();
+  e.stopPropagation();
 
-        const highlightedTitle = result.title.replace(regex, `<mark>$&</mark>`);
-        a.innerHTML = highlightedTitle;
+  const li = target.parentElement;
+  if (!li) return;
 
-        const icon = document.createElement("img");
-        icon.src = "https://www.google.com/s2/favicons?sz=32&domain_url=" + encodeURIComponent(result.originalNode.url);
-        icon.classList.add("favicon-icon");
-        a.prepend(icon);
+  const isOpen = li.classList.contains("open");
+  const siblings = Array.from(li.parentElement?.children || []);
+  siblings.forEach((sib) => sib.classList.remove("open"));
 
-        li.appendChild(a);
-        resultsContainer.appendChild(li);
+  if (isOpen) {
+    li.classList.remove("open");
+  } else {
+    li.classList.add("open");
+    li.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    let parent = li.parentElement;
+    while (parent && parent.classList.contains("accordion-submenu")) {
+      const container = parent.parentElement;
+      if (container) {
+        container.classList.add("open");
+        Array.from(container.parentElement?.children || []).forEach((sib) =>
+          sib.classList.remove("open")
+        );
+      }
+      parent = parent.parentElement?.parentElement;
+    }
+  }
+};
+
+/**
+ * 处理搜索图标点击。
+ */
+const handleSearchIconClick = () => {
+  elements.searchIcon.style.display = "none";
+  elements.searchBox.style.display = "block";
+  elements.topBar.classList.add("searching");
+  elements.searchBox.focus();
+  elements.titleText.style.display = window.innerWidth <= 480 ? "none" : "";
+};
+
+/**
+ * 处理搜索框失去焦点。
+ */
+const handleSearchBoxBlur = () => {
+  if (!elements.searchBox.value) {
+    elements.searchBox.style.display = "none";
+    elements.searchIcon.style.display = "block";
+    elements.topBar.classList.remove("searching");
+    elements.titleText.style.display = window.innerWidth <= 480 ? "inline" : "";
+  }
+};
+
+/**
+ * 处理搜索输入。
+ */
+const handleSearchBoxInput = () => {
+  const keyword = elements.searchBox.value.trim().toLowerCase();
+  const resultsContainer = createElement("ul", { classes: ["search-results"] });
+  elements.bookmarkTree.innerHTML = "";
+
+  if (keyword) {
+    const regex = new RegExp(keyword, "gi");
+    const results = allNodes.filter(
+      (node) =>
+        node.title.toLowerCase().includes(keyword) ||
+        (node.url && node.url.toLowerCase().includes(keyword))
+    );
+
+    results.forEach((result) => {
+      const li = createElement("li");
+      const a = createElement("a", {
+        classes: ["bookmark-link"],
+        attributes: { href: result.url || result.originalNode.url, target: "_blank" },
       });
+      a.innerHTML = result.title.replace(regex, `<mark>$&</mark>`);
+      const icon = createElement("img", {
+        classes: ["favicon-icon"],
+        attributes: {
+          src:
+            "https://www.google.com/s2/favicons?sz=32&domain_url=" +
+            encodeURIComponent(result.url || result.originalNode.url),
+          alt: "",
+        },
+      });
+      a.prepend(icon);
+      li.appendChild(a);
+      resultsContainer.appendChild(li);
+    });
 
-      bookmarkTree.appendChild(resultsContainer);
-    } else {
-      bookmarkTree.innerHTML = originalBookmarkTreeHTML; // 恢复原始 HTML
+    elements.bookmarkTree.appendChild(resultsContainer);
+  } else {
+    elements.bookmarkTree.innerHTML = originalBookmarkTreeHTML;
+  }
+};
+
+/**
+ * 处理标题点击。
+ */
+const handleTitleClick = () => {
+  elements.searchBox.value = "";
+  elements.searchBox.style.display = "none";
+  elements.searchIcon.style.display = "block";
+  elements.topBar.classList.remove("searching");
+  elements.titleText.style.display = window.innerWidth <= 480 ? "inline" : "";
+  elements.bookmarkTree.innerHTML = originalBookmarkTreeHTML;
+};
+
+/**
+ * 绑定文件夹点击事件 (防抖)。
+ * @param {string} calledFrom
+ */
+const bindFolderClickEvents = (calledFrom) => {
+  console.log(`bindFolderClickEvents called from: ${calledFrom}`);
+
+  if (bindEventsTimeout) {
+    clearTimeout(bindEventsTimeout);
+  }
+
+  bindEventsTimeout = setTimeout(() => {
+    const folderLinks = document.querySelectorAll(".menu-item");
+    console.log(`  folderLinks.length: ${folderLinks.length}`);
+
+    folderLinks.forEach((a) => {
+      if (!a.parentElement) return;
+
+      a.removeEventListener("click", handleFolderClick);
+      a.addEventListener("click", handleFolderClick);
+
+      console.log(`  Event listener added to: ${a.textContent}`);
+    });
+
+    console.log("bindFolderClickEvents finished");
+  }, 100);
+};
+
+/**
+ * 初始化 MutationObserver。
+ */
+const initMutationObserver = () => {
+  if (observer) {
+    observer.disconnect();
+  }
+
+  observer = new MutationObserver((mutations) => {
+    let shouldBindEvents = mutations.some((mutation) => mutation.type === "childList");
+    if (shouldBindEvents) {
+      bindFolderClickEvents("MutationObserver");
     }
   });
-});
 
-// 导入 JSON
-importBtn.addEventListener("click", () => {
-  fileInput.click();
-});
+  observer.observe(elements.bookmarkTree, { childList: true, subtree: true });
+};
 
-fileInput.addEventListener("change", () => {
-  const file = fileInput.files[0];
+/**
+ * 初始化应用。
+ */
+const initApp = async () => {
+  elements.searchIcon.addEventListener("click", handleSearchIconClick);
+  elements.searchBox.addEventListener("blur", handleSearchBoxBlur);
+  elements.searchBox.addEventListener("input", handleSearchBoxInput);
+  elements.topBarTitle.addEventListener("click", handleTitleClick);
+  elements.importBtn.addEventListener("click", () => elements.fileInput.click());
+  elements.fileInput.addEventListener("change", handleFileInputChange);
+  elements.uploadBtn.addEventListener("click", handleUploadClick);
+  elements.exportBtn.addEventListener("click", handleExportClick);
+
+  try {
+    await loadRemoteBookmarks();
+  } catch (error) {
+    handleError(error);
+    showMessage("⚠️ 无法从 GitHub 加载书签，您可以点击“导入书签”手动上传。");
+  }
+
+  initMutationObserver();
+};
+
+/**
+ * 加载远程书签。
+ */
+const loadRemoteBookmarks = async () => {
+  const url = "data/bookmarks.json";
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("获取失败");
+
+  const json = await res.json();
+  rawJSON = JSON.stringify(json, null, 2);
+
+  const children = json?.[0]?.children?.[0]?.children || [];
+  renderBookmarkTree(children, elements.bookmarkTree);
+
+  allNodes = flattenNodes(children, 2);
+  originalBookmarkTreeHTML = elements.bookmarkTree.innerHTML;
+  bindFolderClickEvents("DOMContentLoaded");
+};
+
+/**
+ * 处理文件输入变化。
+ * @param {Event} e
+ */
+const handleFileInputChange = (e) => {
+  const file = elements.fileInput.files?.[0];
   if (!file) return;
+
   const reader = new FileReader();
-  reader.onload = e => {
-    const json = e.target.result;
-    rawJSON = json;
+  reader.onload = (event) => {
     try {
+      const json = event.target.result;
       const data = JSON.parse(json);
+      rawJSON = json;
+
       const children = data?.[0]?.children?.[0]?.children || [];
-      bookmarkTree.innerHTML = "";
-      children.forEach(child => {
-        const el = createBookmarkList(child, 2);
-        if (el) bookmarkTree.appendChild(el);
-      });
-      allNodes = flattenNodes(children, 2).filter(node => node.level === 3);
-      originalBookmarkTreeHTML = bookmarkTree.innerHTML; // 保存原始 HTML
-    } catch (e) {
-      alert("无效 JSON");
+      renderBookmarkTree(children, elements.bookmarkTree);
+
+      allNodes = flattenNodes(children, 2);
+      originalBookmarkTreeHTML = elements.bookmarkTree.innerHTML;
+      bindFolderClickEvents("fileInput change");
+    } catch (parseError) {
+      handleError(parseError);
+      showMessage("无效 JSON");
     }
   };
   reader.readAsText(file);
-});
+};
 
-// 上传到 GitHub
-uploadBtn.addEventListener("click", async () => {
+/**
+ * 处理上传按钮点击。
+ */
+const handleUploadClick = async () => {
   const token = prompt("请输入 GitHub Token：");
-  if (!token) return alert("❌ 未提供 Token，上传已取消");
+  if (!token) return showMessage("❌ 未提供 Token，上传已取消");
 
   const repo = "fjvi/bookmark";
   const path = "data/bookmarks.json";
@@ -236,47 +455,58 @@ uploadBtn.addEventListener("click", async () => {
 
   try {
     const res = await fetch(getURL, {
-      headers: { Authorization: "token " + token }
+      headers: { Authorization: `token ${token}` },
     });
     if (res.ok) {
       const json = await res.json();
       sha = json.sha;
     }
-  } catch (e) {}
+  } catch (error) {
+    handleError(error);
+  }
 
   const content = btoa(unescape(encodeURIComponent(rawJSON)));
   const payload = {
     message: "更新书签 JSON",
     content,
     branch,
-    ...(sha && { sha })
+    ...(sha && { sha }),
   };
 
-  const res = await fetch(getURL, {
-    method: "PUT",
-    headers: {
-      Authorization: "token " + token,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch(getURL, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-  if (res.ok) {
-    alert("✅ 上传成功！");
-  } else {
-    alert("❌ 上传失败");
+    if (res.ok) {
+      showMessage("✅ 上传成功！");
+    } else {
+      showMessage("❌ 上传失败");
+    }
+  } catch (uploadError) {
+    handleError(uploadError);
+    showMessage("❌ 上传失败");
   }
-});
+};
 
-// 导出 JSON
-exportBtn.addEventListener("click", () => {
-  if (!rawJSON) return alert("请先导入书签");
+/**
+ * 处理导出按钮点击。
+ */
+const handleExportClick = () => {
+  if (!rawJSON) return showMessage("请先导入书签");
 
   const blob = new Blob([rawJSON], { type: "application/json" });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "bookmarks.json";
+  const a = createElement("a", { attributes: { href: url, download: "bookmarks.json" } });
   a.click();
   URL.revokeObjectURL(url);
-});
+};
+
+// --- 初始化 ---
+
+window.addEventListener("DOMContentLoaded", initApp);
