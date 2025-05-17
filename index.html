@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
-  <meta charset="UTF-8" />
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" type="image/x-icon" href="data/favicon.ico">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0" />
-  <title>Bookmarks</title>
-  <link rel="stylesheet" href="style.css" />
+    <title>Bookmarks</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <div class="top-bar">
-    <div class="top-bar-content">
-      <div class="top-bar-title">
-        <img src="data/icon.png" class="title-icon" />
-        <span>Bookmarks</span>
-      </div>
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-title">
+                <img src="data/favicon.ico" class="title-icon" />
+                <span>Bookmarks</span>
+            </div>
+        </div>
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-box" placeholder="搜索书签..." />
+        </div>
     </div>
-    <div class="search-container">
-      <span class="search-icon">🔍</span>
-      <input type="text" class="search-box" placeholder="搜索书签..." />
+
+    <ul id="bookmarkTree" class="accordion-menu"></ul>
+
+    <div class="bottom-bar">
+        <button id="import-btn">导入</button>
+        <button id="export-btn">导出</button>
+        <input type="file" id="bookmark-file" accept=".json" style="display: none;" />
+
+        <div id="import-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <input type="file" id="modal-bookmark-file" accept=".json" />
+                <button id="modal-upload-btn">上传到 GitHub</button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <ul id="bookmarkTree" class="accordion-menu"></ul>
-
-  <!-- ✅ 合并的底部操作栏 -->
-  <div class="bottom-bar">
-    <button id="import-btn">导入</button>
-    <button id="upload">上传</button>
-    <button id="export-btn">导出</button>
-    <input type="file" id="bookmark-file" accept=".json" style="display: none;" />
-  </div>
-
-  <script src="main.js"></script>
+    <script src="main.js"></script>
 </body>
+
 </html>
