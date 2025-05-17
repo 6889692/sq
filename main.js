@@ -14,7 +14,8 @@ let allNodes = [];
 let originalBookmarkTreeHTML = "";
 let observer = null;
 let bindEventsTimeout = null; // 用于防抖
-
+const LOAD_BOOKMARKS_TIMEOUT = 10000; // 延迟弹窗显示的毫秒数
+let loadBookmarksTimeoutId = null; // 用于存储 setTimeout 的 ID
 // 预处理书签数据，扁平化节点以便搜索
 function flattenNodes(nodes, level) {
   const results = [];
@@ -37,37 +38,112 @@ function flattenNodes(nodes, level) {
 }
 
 const FaviconLoader = {
-  FAVICON_CACHE_PREFIX: "favicon_",
-  BACKUP_FAVICON_URLS: [
-    "https://api.faviconkit.com/",
-    "https://icon.horse/icon/",
-    //  "https://example.com/favicon-proxy/", // 更多备用地址
-  ],
-  DEFAULT_FAVICON: "", // 可选：默认 favicon URL
+    FAVICON_CACHE_PREFIX: "favicon_",
+    BACKUP_FAVICON_URLS: [
+        "https://api.faviconkit.com/",
+        // "https://icon.horse/icon/", // 可以根据需要启用
+    ],
+    DEFAULT_FAVICON: "",
+    BACKUP_ATTEMPT_DELAY: 500, // 毫秒，尝试备用地址的延迟
+    BACKUP_ATTEMPT_TIMEOUT: 2000, // 毫秒，备用地址尝试的超时时间
 
-  /**
-   * 获取 favicon URL，优先从本地缓存获取。
-   * @param {string} url - 链接 URL
-   * @returns {string} favicon URL
-   */
-  getFaviconUrl(url) {
-    if (!url) return FaviconLoader.DEFAULT_FAVICON;
+    getFaviconUrl(url) {
+        if (!url) return FaviconLoader.DEFAULT_FAVICON;
+        try {
+            const domain = new URL(url).hostname;
+            const cachedUrl = localStorage.getItem(FaviconLoader.FAVICON_CACHE_PREFIX + domain);
+            if (cachedUrl) {
+                return cachedUrl;
+            }
+            const googleFaviconUrl = `https://www.google.com/s2/favicons?sz=32&domain_url=${encodeURIComponent(url)}`;
+            return googleFaviconUrl;
+        } catch (error) {
+            console.error("Error getting favicon URL:", error);
+            return FaviconLoader.DEFAULT_FAVICON;
+        }
+    },
 
-    try {
-      const domain = new URL(url).hostname;
-      const cachedUrl = localStorage.getItem(FaviconLoader.FAVICON_CACHE_PREFIX + domain);
+    loadFavicon(icon, url) {
+        let attempt = 0;
 
-      if (cachedUrl) {
-        return cachedUrl;
-      }
+        const attemptLoad = (currentUrl) => {
+            const img = new Image();
+            let timeoutId;
 
-      const googleFaviconUrl = `https://www.google.com/s2/favicons?sz=32&domain_url=${encodeURIComponent(url)}`;
-      return googleFaviconUrl;
-    } catch (error) {
-      console.error("Error getting favicon URL:", error);
-      return FaviconLoader.DEFAULT_FAVICON;
+            img.onload = () => {
+                clearTimeout(timeoutId);
+                if (attempt === 0 && currentUrl.startsWith('https://www.google.com/')) {
+                    try {
+                        localStorage.setItem(FaviconLoader.FAVICON_CACHE_PREFIX + new URL(url).hostname, currentUrl);
+                    } catch (e) {
+                        console.warn("Error saving favicon to localStorage:", e);
+                    }
+                }
+                icon.src = currentUrl;
+            };
+
+            img.onerror = () => {
+                clearTimeout(timeoutId);
+                if (attempt < FaviconLoader.BACKUP_FAVICON_URLS.length) {
+                    attempt++;
+                    setTimeout(() => {
+                        attemptLoad(FaviconLoader.BACKUP_FAVICON_URLS[attempt - 1] + new URL(url).hostname);
+                    }, FaviconLoader.BACKUP_ATTEMPT_DELAY);
+                } else if (FaviconLoader.DEFAULT_FAVICON) {
+                    icon.src = FaviconLoader.DEFAULT_FAVICON;
+                }
+            };
+
+            timeoutId = setTimeout(() => {
+                img.onerror = null; // 清除 onerror，避免重复触发
+                if (attempt < FaviconLoader.BACKUP_FAVICON_URLS.length) {
+                    attempt++;
+                    setTimeout(() => {
+                        attemptLoad(FaviconLoader.BACKUP_FAVICON_URLS[attempt - 1] + new URL(url).hostname);
+                    }, FaviconLoader.BACKUP_ATTEMPT_DELAY);
+                } else if (FaviconLoader.DEFAULT_FAVICON) {
+                    icon.src = FaviconLoader.DEFAULT_FAVICON;
+                }
+            }, FaviconLoader.BACKUP_ATTEMPT_TIMEOUT);
+
+            img.src = currentUrl;
+        };
+
+        attemptLoad(FaviconLoader.getFaviconUrl(url));
     }
-  },
+};
+
+function createBookmarkList(node, level) {
+    const li = document.createElement("li");
+    li.classList.add(`level-${level}`);
+
+    if (node.children && node.children.length > 0) {
+        li.classList.add("folder");
+        const a = document.createElement("a");
+        a.href = "javascript:void(0);";
+        a.classList.add("menu-item");
+        a.textContent = node.title || "(未命名)";
+        li.appendChild(a);
+        const ul = document.createElement("ul");
+        ul.classList.add("accordion-submenu");
+        node.children.forEach(child => {
+            const childEl = createBookmarkList(child, level + 1);
+            if (childEl) ul.appendChild(childEl);
+        });
+        li.appendChild(ul);
+    } else if (node.url) {
+        const a = document.createElement("a");
+        a.href = node.url;
+        a.classList.add("bookmark-link");
+        a.target = "_blank";
+        a.textContent = node.title || "(无标题)";
+        const icon = document.createElement("img");
+        icon.classList.add("favicon-icon");
+        a.prepend(icon);
+        li.appendChild(a);
+        FaviconLoader.loadFavicon(icon, node.url); // 使用新的加载逻辑
+    }
+    return li;
 };
 
 // 📂 渲染书签树
@@ -236,9 +312,14 @@ window.addEventListener("DOMContentLoaded", async () => {
     allNodes = flattenNodes(children, 2);
     originalBookmarkTreeHTML = bookmarkTree.innerHTML;
     bindFolderClickEvents("DOMContentLoaded");
-    observeBookmarkTree(); // 开始观察
+    observeBookmarkTree();
+    if (loadBookmarksTimeoutId) {
+      clearTimeout(loadBookmarksTimeoutId); // 取消弹窗
+    }
   } catch (e) {
-    alert("⚠️ 无法从 GitHub 加载书签，您可以点击“导入书签”手动上传。");
+    loadBookmarksTimeoutId = setTimeout(() => {
+      alert("⚠️ 无法从 GitHub 加载书签，您可以点击“导入书签”手动上传。");
+    }, LOAD_BOOKMARKS_TIMEOUT);
   }
 });
 
