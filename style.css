@@ -121,6 +121,9 @@ body {
     .top-bar.searching .top-bar-content .top-bar-title span {
         display: none !important;
         /* 使用 !important */
+.search-box {
+    width: 200px;
+}
     }
 }
 
@@ -144,7 +147,7 @@ body {
     background: #444;
     color: white;
     font-size: 1.2rem;
-    width: 240px;
+    width: 300px;
     margin: auto 10px;
     flex-grow: 1;
     /* 新增：允许扩展 */
