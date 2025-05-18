@@ -309,3 +309,19 @@ a.bookmark-link:hover {
     vertical-align: middle;
     /* 垂直居中 */
 }
+
+    /* 复制按钮 */
+.copy-button {
+  margin-left: 10px;
+  padding: 4px 10px;
+  font-size: 12px;
+  background-color: #b94152;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.copy-button:hover {
+  background-color: #a32e40;
+}
