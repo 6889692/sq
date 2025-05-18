@@ -44,51 +44,104 @@ function flattenNodes(nodes, level) {
 
 // 📂 渲染书签树
 function createBookmarkList(node, level) {
-const a = document.createElement("a");
-a.href = node.url;
-a.classList.add("bookmark-link");
-a.target = "_blank";
-a.textContent = node.title || "(无标题)";
+  const li = document.createElement("li");
+  li.classList.add(`level-${level}`);
 
-// favicon
-const icon = document.createElement("img");
-icon.src = "https://www.google.com/s2/favicons?sz=32&domain_url=" + encodeURIComponent(node.url);
-icon.classList.add("favicon-icon");
-a.prepend(icon);
+  if (node.children && node.children.length > 0) {
+    li.classList.add("folder");
 
-// ✅ 添加复制按钮
-const copyBtn = document.createElement("button");
-copyBtn.textContent = "复制";
-copyBtn.classList.add("copy-button");
-copyBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  try {
-    if (node.url.startsWith("data:text/html")) {
-      const html = decodeURIComponent(node.url.split(",")[1]);
-      const match = html.match(/<pre>([\s\S]*?)<\/pre>/i);
-      if (match) {
-        const text = match[1]
-          .replace(/&lt;/g, "<")
-          .replace(/&gt;/g, ">")
-          .replace(/&amp;/g, "&");
-        navigator.clipboard.writeText(text).then(() => {
-          copyBtn.textContent = "✅ 已复制";
-          setTimeout(() => copyBtn.textContent = "复制", 1000);
-        });
-      } else {
-        alert("❌ 未找到内容");
-      }
+    const a = document.createElement("a");
+    a.href = "javascript:void(0);";
+    a.classList.add("menu-item");
+    a.textContent = node.title || "(未命名)";
+    li.appendChild(a);
+
+    const ul = document.createElement("ul");
+    ul.classList.add("accordion-submenu");
+    node.children.forEach(child => {
+      const childEl = createBookmarkList(child, level + 1);
+      if (childEl) ul.appendChild(childEl);
+    });
+    li.appendChild(ul);
+  } else if (node.url) {
+    const isDataBookmark = node.url.startsWith("data:text/html");
+
+    if (isDataBookmark) {
+      // 🗐 图标 + favicon + 文本（不可跳转）
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("bookmark-data-item");
+
+      const icon = document.createElement("img");
+      icon.src = "https://www.google.com/s2/favicons?sz=32&domain_url=" + encodeURIComponent(node.url);
+      icon.classList.add("favicon-icon");
+      wrapper.appendChild(icon);
+
+      const copyIcon = document.createElement("span");
+      copyIcon.classList.add("copy-symbol");
+      copyIcon.textContent = "🗐";
+      wrapper.appendChild(copyIcon);
+
+      const text = document.createElement("span");
+      text.classList.add("copyable");
+      text.textContent = node.title || "(无标题)";
+      text.title = "点击复制内容";
+
+      text.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        try {
+          const html = decodeURIComponent(node.url.split(",")[1]);
+          const match = html.match(/<pre>([\s\S]*?)<\/pre>/i);
+          if (match) {
+            const content = match[1]
+              .replace(/&lt;/g, "<")
+              .replace(/&gt;/g, ">")
+              .replace(/&amp;/g, "&");
+
+            navigator.clipboard.writeText(content).then(() => {
+              copyIcon.textContent = "✅";
+              wrapper.classList.add("copied");
+              setTimeout(() => {
+                copyIcon.textContent = "🗐";
+                wrapper.classList.remove("copied");
+              }, 1000);
+            });
+          }
+        } catch {}
+      });
+
+      wrapper.appendChild(text);
+      li.appendChild(wrapper);
+
     } else {
-      alert("❌ 不支持的书签格式");
-    }
-  } catch (err) {
-    alert("❌ 复制失败：" + err.message);
-  }
-});
+      // 普通链接保留原结构
+      const a = document.createElement("a");
+      a.href = node.url;
+      a.classList.add("bookmark-link");
+      a.target = "_blank";
+      a.textContent = node.title || "(无标题)";
 
-li.appendChild(a);
-li.appendChild(copyBtn);
+      const icon = document.createElement("img");
+      icon.src = "https://www.google.com/s2/favicons?sz=32&domain_url=" + encodeURIComponent(node.url);
+      icon.classList.add("favicon-icon");
+      a.prepend(icon);
+
+      li.appendChild(a);
+    }
+  }
+
+  return li;
+}
+
+// 📂 渲染书签树
+function renderBookmarkTree(bookmarkTree, jsonData) {
+  bookmarkTree.innerHTML = "";
+  jsonData.forEach(child => {
+    const el = createBookmarkList(child, 2);
+    if (el) bookmarkTree.appendChild(el);
+  });
+}
+
 
 
 // ✅ 折叠 + 滚动行为
