@@ -6,136 +6,6 @@
           {
             "children": [
               {
-                "dateAdded": 1423571553780,
-                "dateLastUsed": 1747407940706,
-                "id": "1599",
-                "index": 0,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "Google",
-                "url": "https://www.google.com/ncr"
-              },
-              {
-                "dateAdded": 1629118051302,
-                "dateLastUsed": 1746979347380,
-                "id": "1602",
-                "index": 1,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "YouTube",
-                "url": "https://www.youtube.com/"
-              },
-              {
-                "dateAdded": 1677593317248,
-                "dateLastUsed": 1746939450870,
-                "id": "1601",
-                "index": 2,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "🅱bing",
-                "url": "https://www.bing.com/?setmkt=en-US&setlang=en-US"
-              },
-              {
-                "dateAdded": 1727795081351,
-                "dateLastUsed": 1747401834876,
-                "id": "2097",
-                "index": 3,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "Github",
-                "url": "https://github.com/fjvi?tab=repositories"
-              },
-              {
-                "dateAdded": 1727150635839,
-                "dateLastUsed": 1747398665381,
-                "id": "2058",
-                "index": 4,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "cloudflare",
-                "url": "https://dash.cloudflare.com/860491cbf245fe34e96aa127a8983f67"
-              },
-              {
-                "dateAdded": 1740666626685,
-                "dateLastUsed": 1747241660490,
-                "id": "2791",
-                "index": 5,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "MGTnote",
-                "url": "https://fjvi.github.io/note/"
-              },
-              {
-                "dateAdded": 1613890621579,
-                "dateLastUsed": 1740581210691,
-                "id": "1607",
-                "index": 6,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "易空间",
-                "url": "http://wyj.ys168.com/"
-              },
-              {
-                "dateAdded": 1727979897948,
-                "dateLastUsed": 1743957630869,
-                "id": "2100",
-                "index": 7,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "便签",
-                "url": "https://test.aypwip.org/webnote/wodewangluobianqianziliudi"
-              },
-              {
-                "dateAdded": 1740017996540,
-                "dateLastUsed": 1747472389125,
-                "id": "2213",
-                "index": 8,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "DeepSeek",
-                "url": "https://chat.deepseek.com/"
-              },
-              {
-                "dateAdded": 1730268767166,
-                "dateLastUsed": 1747457077648,
-                "id": "2208",
-                "index": 9,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "GPT",
-                "url": "https://chatgpt.com/"
-              },
-              {
-                "dateAdded": 1740206533092,
-                "dateLastUsed": 1747492036059,
-                "id": "2215",
-                "index": 10,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "SQ",
-                "url": "file:///D:/fjwangyi/Documents/%E4%BB%A3%E7%A0%81%E5%A4%87%E4%BB%BD/fjvi/sq/index.html"
-              },
-              {
-                "dateAdded": 1747074966485,
-                "dateLastUsed": 1747516343414,
-                "id": "5208",
-                "index": 11,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "Bookmarks",
-                "url": "file:///D:/fjwangyi/Documents/%E4%BB%A3%E7%A0%81%E5%A4%87%E4%BB%BD/fjvi/index.html"
-              },
-              {
-                "dateAdded": 1747155180640,
-                "dateLastUsed": 1747231507310,
-                "id": "5210",
-                "index": 12,
-                "parentId": "5219",
-                "syncing": true,
-                "title": "Jav",
-                "url": "file:///D:/fjwangyi/Documents/%E4%BB%A3%E7%A0%81%E5%A4%87%E4%BB%BD/fjvi/wiki/jav.html"
-              },
-              {
                 "children": [
                   {
                     "children": [
@@ -298,14 +168,144 @@
                 "dateAdded": 1728149124774,
                 "dateGroupModified": 1744164428507,
                 "id": "2111",
-                "index": 13,
+                "index": 0,
                 "parentId": "5219",
                 "syncing": true,
                 "title": "收藏"
+              },
+              {
+                "dateAdded": 1423571553780,
+                "dateLastUsed": 1747580015880,
+                "id": "1599",
+                "index": 1,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "Google",
+                "url": "https://www.google.com/ncr"
+              },
+              {
+                "dateAdded": 1629118051302,
+                "dateLastUsed": 1746979347380,
+                "id": "1602",
+                "index": 2,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "YouTube",
+                "url": "https://www.youtube.com/"
+              },
+              {
+                "dateAdded": 1677593317248,
+                "dateLastUsed": 1746939450870,
+                "id": "1601",
+                "index": 3,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "🅱bing",
+                "url": "https://www.bing.com/?setmkt=en-US&setlang=en-US"
+              },
+              {
+                "dateAdded": 1727795081351,
+                "dateLastUsed": 1747401834876,
+                "id": "2097",
+                "index": 4,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "Github",
+                "url": "https://github.com/fjvi?tab=repositories"
+              },
+              {
+                "dateAdded": 1727150635839,
+                "dateLastUsed": 1747398665381,
+                "id": "2058",
+                "index": 5,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "cloudflare",
+                "url": "https://dash.cloudflare.com/860491cbf245fe34e96aa127a8983f67"
+              },
+              {
+                "dateAdded": 1740666626685,
+                "dateLastUsed": 1747579955152,
+                "id": "2791",
+                "index": 6,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "MGTnote",
+                "url": "https://fjvi.github.io/note/"
+              },
+              {
+                "dateAdded": 1613890621579,
+                "dateLastUsed": 1740581210691,
+                "id": "1607",
+                "index": 7,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "易空间",
+                "url": "http://wyj.ys168.com/"
+              },
+              {
+                "dateAdded": 1727979897948,
+                "dateLastUsed": 1743957630869,
+                "id": "2100",
+                "index": 8,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "便签",
+                "url": "https://test.aypwip.org/webnote/wodewangluobianqianziliudi"
+              },
+              {
+                "dateAdded": 1740017996540,
+                "dateLastUsed": 1747569292217,
+                "id": "2213",
+                "index": 9,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "DeepSeek",
+                "url": "https://chat.deepseek.com/"
+              },
+              {
+                "dateAdded": 1730268767166,
+                "dateLastUsed": 1747560323082,
+                "id": "2208",
+                "index": 10,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "GPT",
+                "url": "https://chatgpt.com/"
+              },
+              {
+                "dateAdded": 1740206533092,
+                "dateLastUsed": 1747581428702,
+                "id": "2215",
+                "index": 11,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "SQ",
+                "url": "file:///D:/fjwangyi/Documents/%E4%BB%A3%E7%A0%81%E5%A4%87%E4%BB%BD/fjvi/sq/index.html"
+              },
+              {
+                "dateAdded": 1747074966485,
+                "dateLastUsed": 1747573992197,
+                "id": "5208",
+                "index": 12,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "Bookmarks",
+                "url": "file:///D:/fjwangyi/Documents/%E4%BB%A3%E7%A0%81%E5%A4%87%E4%BB%BD/fjvi/index.html"
+              },
+              {
+                "dateAdded": 1747155180640,
+                "dateLastUsed": 1747231507310,
+                "id": "5210",
+                "index": 13,
+                "parentId": "5219",
+                "syncing": true,
+                "title": "Jav",
+                "url": "file:///D:/fjwangyi/Documents/%E4%BB%A3%E7%A0%81%E5%A4%87%E4%BB%BD/fjvi/wiki/jav.html"
               }
             ],
             "dateAdded": 1747300171048,
-            "dateGroupModified": 1747519696795,
+            "dateGroupModified": 1747551129018,
             "id": "5219",
             "index": 0,
             "parentId": "1",
@@ -431,7 +431,7 @@
               },
               {
                 "dateAdded": 1728289098840,
-                "dateLastUsed": 1741595979482,
+                "dateLastUsed": 1747581859412,
                 "id": "2129",
                 "index": 6,
                 "parentId": "2124",
@@ -613,7 +613,7 @@
               },
               {
                 "dateAdded": 1745856534293,
-                "dateLastUsed": 1747514834769,
+                "dateLastUsed": 1747572510607,
                 "id": "5178",
                 "index": 26,
                 "parentId": "2124",
@@ -1089,6 +1089,7 @@
                 "children": [
                   {
                     "dateAdded": 1741508163329,
+                    "dateLastUsed": 1747581896951,
                     "id": "5066",
                     "index": 0,
                     "parentId": "2276",
@@ -1457,7 +1458,7 @@
             "index": 4,
             "parentId": "1",
             "syncing": true,
-            "title": "网站"
+            "title": "站点"
           },
           {
             "children": [
@@ -3389,6 +3390,75 @@
           },
           {
             "children": [
+              {
+                "children": [
+                  {
+                    "dateAdded": 1747580434506,
+                    "dateLastUsed": 1747580637499,
+                    "id": "5261",
+                    "index": 0,
+                    "parentId": "5259",
+                    "syncing": true,
+                    "title": "Chrome 扩展开发中，代码编辑器（如 VS Code）标…",
+                    "url": "data:text/html;charset=utf-8,%0A%20%20%20%20%20%20%3C!DOCTYPE%20html%3E%0A%20%20%20%20%20%20%3Chtml%3E%0A%20%20%20%20%20%20%20%20%3Chead%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cmeta%20charset%3D%22utf-8%22%3E%0A%20%20%20%20%20%20%20%20%3C%2Fhead%3E%0A%20%20%20%20%20%20%20%20%3Cbody%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cpre%3EChrome%20%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91%E4%B8%AD%EF%BC%8C%E4%BB%A3%E7%A0%81%E7%BC%96%E8%BE%91%E5%99%A8%EF%BC%88%E5%A6%82%20VS%20Code%EF%BC%89%E6%A0%87%E9%BB%84%20info.selectionText%20%E5%8F%AF%E8%83%BD%E6%98%AF%E7%B1%BB%E5%9E%8B%E6%8F%90%E7%A4%BA%E8%AD%A6%E5%91%8A%EF%BC%8C%E4%BD%86%E5%B9%B6%E4%B8%8D%E5%BD%B1%E5%93%8D%E5%AE%9E%E9%99%85%E8%BF%90%E8%A1%8C%EF%BC%8C%E5%8F%AA%E8%A6%81%E4%BD%A0%E7%A1%AE%E4%BF%9D%20contextMenus%20%E7%9A%84%20contexts%20%E5%8C%85%E5%90%AB%20%22selection%22%E3%80%82%3C%2Fpre%3E%0A%20%20%20%20%20%20%20%20%3C%2Fbody%3E%0A%20%20%20%20%20%20%3C%2Fhtml%3E%0A%20%20%20%20"
+                  },
+                  {
+                    "dateAdded": 1747580601041,
+                    "id": "5262",
+                    "index": 1,
+                    "parentId": "5259",
+                    "syncing": true,
+                    "title": "如果你尚未添加 copy.html，请告诉我，我可以一起打包…",
+                    "url": "chrome-extension://bpchmgblmojinbogghdgnjeegojpnnmm/copy.html?text=%E5%A6%82%E6%9E%9C%E4%BD%A0%E5%B0%9A%E6%9C%AA%E6%B7%BB%E5%8A%A0%20copy.html%EF%BC%8C%E8%AF%B7%E5%91%8A%E8%AF%89%E6%88%91%EF%BC%8C%E6%88%91%E5%8F%AF%E4%BB%A5%E4%B8%80%E8%B5%B7%E6%89%93%E5%8C%85%E6%88%96%E8%80%85%E6%8F%90%E4%BE%9B%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E3%80%82"
+                  },
+                  {
+                    "dateAdded": 1747580650359,
+                    "id": "5263",
+                    "index": 2,
+                    "parentId": "5259",
+                    "syncing": true,
+                    "title": "如果你需要我立即打包这个完整版本（含 manifest.js…",
+                    "url": "chrome-extension://bpchmgblmojinbogghdgnjeegojpnnmm/copy.html?text=%E5%A6%82%E6%9E%9C%E4%BD%A0%E9%9C%80%E8%A6%81%E6%88%91%E7%AB%8B%E5%8D%B3%E6%89%93%E5%8C%85%E8%BF%99%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%89%88%E6%9C%AC%EF%BC%88%E5%90%AB%20manifest.json%2C%20background.js%2C%20copy.html%2C%20%E5%9B%BE%E6%A0%87%E7%AD%89%EF%BC%89%EF%BC%8C%E4%B9%9F%E5%8F%AA%E9%9C%80%E8%AF%B4%E4%B8%80%E5%A3%B0%E2%80%9C%E6%89%93%E5%8C%85%E6%9C%80%E7%BB%88%E7%89%88%E2%80%9D%EF%BC%8C%E6%88%91%E4%BC%9A%E7%AB%8B%E5%8D%B3%E5%A4%84%E7%90%86%20%E2%9C%85"
+                  },
+                  {
+                    "dateAdded": 1747581256946,
+                    "dateLastUsed": 1747581261946,
+                    "id": "5264",
+                    "index": 3,
+                    "parentId": "5259",
+                    "syncing": true,
+                    "title": "你可以这样测试： ✅ 加载这个扩展（确保 manifest.…",
+                    "url": "data:text/html;charset=utf-8,%3C!DOCTYPE%20html%3E%0A%3Chtml%3E%0A%3Chead%3E%0A%20%20%3Cmeta%20charset%3D%22utf-8%22%3E%0A%20%20%3Cstyle%3E%0A%20%20%20%20body%20%7B%20font-family%3A%20monospace%3B%20padding%3A%2020px%3B%20%7D%0A%20%20%20%20pre%20%7B%0A%20%20%20%20%20%20white-space%3A%20pre-wrap%3B%0A%20%20%20%20%20%20word-break%3A%20break-word%3B%0A%20%20%20%20%20%20font-size%3A%2014px%3B%0A%20%20%20%20%20%20line-height%3A%201.5%3B%0A%20%20%20%20%7D%0A%20%20%3C%2Fstyle%3E%0A%3C%2Fhead%3E%0A%3Cbody%3E%0A%20%20%3Cpre%3E%E4%BD%A0%E5%8F%AF%E4%BB%A5%E8%BF%99%E6%A0%B7%E6%B5%8B%E8%AF%95%EF%BC%9A%20%E2%9C%85%20%E5%8A%A0%E8%BD%BD%E8%BF%99%E4%B8%AA%E6%89%A9%E5%B1%95%EF%BC%88%E7%A1%AE%E4%BF%9D%20manifest.json%20%E4%B8%AD%E8%AE%BE%E7%BD%AE%E6%AD%A3%E7%A1%AE%EF%BC%89%20%20%E2%9C%85%20%E9%80%89%E4%B8%AD%E7%BD%91%E9%A1%B5%E4%B8%8A%E4%B8%80%E6%AE%B5%E6%96%87%E6%9C%AC%E6%88%96%E4%BB%A3%E7%A0%81%20%20%E2%9C%85%20%E5%8F%B3%E9%94%AE%20%E2%86%92%20%E2%80%9C%E6%B7%BB%E5%8A%A0%E9%80%89%E4%B8%AD%E6%96%87%E6%9C%AC%E5%88%B0%E4%B9%A6%E7%AD%BE%E2%80%9D%20%20%E2%9C%85%20%E6%89%93%E5%BC%80%E4%B9%A6%E7%AD%BE%20%E2%86%92%20%E6%89%BE%E5%88%B0%E2%80%9C%F0%9F%93%8C%E6%91%98%E5%BD%95%E2%80%9D%E6%96%87%E4%BB%B6%E5%A4%B9%20%E2%86%92%20%E7%82%B9%E5%87%BB%E4%B9%A6%E7%AD%BE%20%20%E2%9C%85%20%E4%BC%9A%E5%9C%A8%E6%96%B0%E6%A0%87%E7%AD%BE%E9%A1%B5%E4%B8%AD%E6%98%BE%E7%A4%BA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%90%8E%E7%9A%84%E6%96%87%E6%9C%AC%EF%BC%88%E5%8F%AF%E5%A4%8D%E5%88%B6%EF%BC%89%3C%2Fpre%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E"
+                  },
+                  {
+                    "dateAdded": 1747581273560,
+                    "dateLastUsed": 1747581281013,
+                    "id": "5265",
+                    "index": 4,
+                    "parentId": "5259",
+                    "syncing": true,
+                    "title": "如果你需要我一并生成完整 .zip 安装包（含 manife…",
+                    "url": "data:text/html;charset=utf-8,%3C!DOCTYPE%20html%3E%0A%3Chtml%3E%0A%3Chead%3E%0A%20%20%3Cmeta%20charset%3D%22utf-8%22%3E%0A%20%20%3Cstyle%3E%0A%20%20%20%20body%20%7B%20font-family%3A%20monospace%3B%20padding%3A%2020px%3B%20%7D%0A%20%20%20%20pre%20%7B%0A%20%20%20%20%20%20white-space%3A%20pre-wrap%3B%0A%20%20%20%20%20%20word-break%3A%20break-word%3B%0A%20%20%20%20%20%20font-size%3A%2014px%3B%0A%20%20%20%20%20%20line-height%3A%201.5%3B%0A%20%20%20%20%7D%0A%20%20%3C%2Fstyle%3E%0A%3C%2Fhead%3E%0A%3Cbody%3E%0A%20%20%3Cpre%3E%E5%A6%82%E6%9E%9C%E4%BD%A0%E9%9C%80%E8%A6%81%E6%88%91%E4%B8%80%E5%B9%B6%E7%94%9F%E6%88%90%E5%AE%8C%E6%95%B4%20.zip%20%E5%AE%89%E8%A3%85%E5%8C%85%EF%BC%88%E5%90%AB%20manifest%E3%80%81%E5%9B%BE%E6%A0%87%EF%BC%89%EF%BC%8C%E9%9A%8F%E6%97%B6%E5%91%8A%E8%AF%89%E6%88%91%E3%80%82%E6%88%91%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%BB%99%E4%BD%A0%E6%8F%90%E4%BE%9B%20Web%20%E5%89%8D%E7%AB%AF%E8%A7%A3%E6%9E%90%E5%B9%B6%E4%B8%80%E9%94%AE%E5%A4%8D%E5%88%B6%E8%BF%99%E4%BA%9B%E4%B9%A6%E7%AD%BE%E7%9A%84%E6%A8%A1%E6%9D%BF%E4%BB%A3%E7%A0%81%E3%80%82%E7%BB%A7%E7%BB%AD%E5%90%97%EF%BC%9F%3C%2Fpre%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E"
+                  },
+                  {
+                    "dateAdded": 1747581831799,
+                    "dateLastUsed": 1747581840984,
+                    "id": "5266",
+                    "index": 5,
+                    "parentId": "5259",
+                    "syncing": true,
+                    "title": ".copy-button {   margin-left: …",
+                    "url": "data:text/html;charset=utf-8,%3C!DOCTYPE%20html%3E%0A%3Chtml%3E%0A%3Chead%3E%0A%20%20%3Cmeta%20charset%3D%22utf-8%22%3E%0A%20%20%3Cstyle%3E%0A%20%20%20%20body%20%7B%20font-family%3A%20monospace%3B%20padding%3A%2020px%3B%20%7D%0A%20%20%20%20pre%20%7B%0A%20%20%20%20%20%20white-space%3A%20pre-wrap%3B%0A%20%20%20%20%20%20word-break%3A%20break-word%3B%0A%20%20%20%20%20%20font-size%3A%2014px%3B%0A%20%20%20%20%20%20line-height%3A%201.5%3B%0A%20%20%20%20%7D%0A%20%20%3C%2Fstyle%3E%0A%3C%2Fhead%3E%0A%3Cbody%3E%0A%20%20%3Cpre%3E.copy-button%20%7B%20%20%20margin-left%3A%2010px%3B%20%20%20padding%3A%204px%2010px%3B%20%20%20font-size%3A%2012px%3B%20%20%20background-color%3A%20%23b94152%3B%20%20%20color%3A%20white%3B%20%20%20border%3A%20none%3B%20%20%20border-radius%3A%204px%3B%20%20%20cursor%3A%20pointer%3B%20%7D%20%20.copy-button%3Ahover%20%7B%20%20%20background-color%3A%20%23a32e40%3B%20%7D%3C%2Fpre%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E"
+                  }
+                ],
+                "dateAdded": 1747569763329,
+                "dateGroupModified": 1747581831799,
+                "id": "5259",
+                "index": 0,
+                "parentId": "5213",
+                "syncing": true,
+                "title": "📌摘录"
+              },
               {
                 "children": [
                   {
@@ -5533,7 +5603,7 @@
                 "dateAdded": 1741449975694,
                 "dateGroupModified": 1741449999168,
                 "id": "4749",
-                "index": 0,
+                "index": 1,
                 "parentId": "5213",
                 "syncing": true,
                 "title": "JS工具"
@@ -5541,7 +5611,7 @@
               {
                 "dateAdded": 1747319275440,
                 "id": "5223",
-                "index": 1,
+                "index": 2,
                 "parentId": "5213",
                 "syncing": true,
                 "title": "书签管理器",
@@ -5550,7 +5620,7 @@
               {
                 "dateAdded": 1747323362202,
                 "id": "5251",
-                "index": 2,
+                "index": 3,
                 "parentId": "5213",
                 "syncing": true,
                 "title": "书签",
@@ -5558,7 +5628,7 @@
               }
             ],
             "dateAdded": 1747223979000,
-            "dateGroupModified": 1747323432052,
+            "dateGroupModified": 1747579600486,
             "id": "5213",
             "index": 10,
             "parentId": "1",
@@ -5567,7 +5637,7 @@
           }
         ],
         "dateAdded": 1707645589983,
-        "dateGroupModified": 1747520054636,
+        "dateGroupModified": 1747551183386,
         "folderType": "bookmarks-bar",
         "id": "1",
         "index": 0,
@@ -5578,7 +5648,7 @@
       {
         "children": [],
         "dateAdded": 1707645589983,
-        "dateGroupModified": 1747323370939,
+        "dateGroupModified": 1747569763329,
         "folderType": "other",
         "id": "2",
         "index": 1,
@@ -5587,7 +5657,7 @@
         "title": "其他书签"
       }
     ],
-    "dateAdded": 1747514812839,
+    "dateAdded": 1747580007515,
     "id": "0",
     "syncing": false,
     "title": ""
