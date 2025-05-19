@@ -223,6 +223,9 @@ ul.search-results {
     border-bottom: 0.5px solid #bbb;
     font-size: 1.4rem;
     color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
 }
    
 
@@ -267,9 +270,8 @@ ul.search-results {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 10;
 }
-
 .level-3.open>a {
     background-color: #ffc25a;
     color: #fff;
@@ -277,7 +279,6 @@ ul.search-results {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     position: sticky;
     top: 0;
-    z-index: 1000;
 }
 
 .level-4.open>a {
