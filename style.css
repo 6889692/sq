@@ -236,7 +236,7 @@ ul.search-results {
 
 /* 三级菜单样式保持不变 */
 .level-3>a.menu-item {
-    padding: 8px 30px;
+    padding: 10px 30px;
     margin: 1px auto;
     background-color: #ddd;
     font-size: 1.2rem;
@@ -266,7 +266,7 @@ ul.search-results {
 .level-2.open>a {
     background-color: #b94152;
     color: #fff;
-    padding: 10px 40px;
+    padding: 10px 30px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     position: sticky;
     top: 0;
@@ -275,7 +275,7 @@ ul.search-results {
 .level-3.open>a {
     background-color: #ffc25a;
     color: #fff;
-    padding: 10px 40px;
+    padding: 10px 30px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     position: sticky;
     top: 0;
@@ -284,7 +284,7 @@ ul.search-results {
 .level-4.open>a {
     background-color: #ffc25a;
     color: #fff;
-    padding: 10px 40px;
+    padding: 10px 30px;
 }
 
 /* 书签链接样式 */
