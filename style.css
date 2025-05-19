@@ -324,29 +324,26 @@ a.bookmark-link:hover {
 
 /* data:text 样式 */
 .bookmark-data-item {
-  align-items: center;
   gap: 6px;
   cursor: default;
-    padding: 10px 0;
-    border-bottom: 0.5px solid #bbb;
+  padding: 10px 10px;
+  border-bottom: 0.5px solid #bbb;
+  white-space: nowrap;  /*强制span不换行*/
+  overflow: hidden;  /*超出宽度部分隐藏*/
 }
 .bookmark-data-item:hover {
     background-color: #99d3fd;
     padding: 10px 0;
 }
 
-.bookmark-data-item .favicon-icon {
-  width: 16px;
-  height: 16px;
-    margin-right: 20px;
-}
-
-/* 图标：默认为🗐，成功后短暂变 ✅ */
+/* 图标：默认为✄，成功后短暂变 ✅ */
 .copy-symbol {
   font-size: 16px;
   color: #999;
   transition: color 0.3s;
-    margin-right: 20px;
+  width: 16px;
+  height: 16px;
+  margin:0 20px;
 }
 
 .bookmark-data-item.copied .copy-symbol {
