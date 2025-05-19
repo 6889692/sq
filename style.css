@@ -312,7 +312,7 @@ a.bookmark-link:hover {
 .favicon-icon {
     width: 16px;
     height: 16px;
-    margin-right: 20px;
+    margin-right: 10px;
     vertical-align: middle;
     /* 垂直居中 */
 }
@@ -335,7 +335,7 @@ a.bookmark-link:hover {
 .bookmark-data-item {
   gap: 6px;
   cursor: default;
-  padding: 10px 10px;
+  padding: 10px 0px;
   border-bottom: 0.5px solid #bbb;
   white-space: nowrap;  /*强制span不换行*/
   overflow: hidden;  /*超出宽度部分隐藏*/
