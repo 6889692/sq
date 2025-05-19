@@ -223,11 +223,7 @@ ul.search-results {
     border-bottom: 0.5px solid #bbb;
     font-size: 1.4rem;
     color: #333;
-    z-index: 100;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    position: sticky;
-    top: 0;
-}
+   
 
 .level-2>a.menu-item:hover {
     background-color: #99d3fd;
@@ -267,12 +263,20 @@ ul.search-results {
     background-color: #b94152;
     color: #fff;
     padding: 10px 40px;
+ z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
 }
 
 .level-3.open>a {
     background-color: #ffc25a;
     color: #fff;
     padding: 10px 40px;
+ z-index: 110;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
 }
 
 .level-4.open>a {
