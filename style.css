@@ -263,20 +263,21 @@ ul.search-results {
     background-color: #b94152;
     color: #fff;
     padding: 10px 40px;
- z-index: 100;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     position: sticky;
     top: 0;
+    z-index: 100;
 }
 
 .level-3.open>a {
     background-color: #ffc25a;
     color: #fff;
     padding: 10px 40px;
- z-index: 110;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
     position: sticky;
     top: 0;
+    z-index: 1000;
 }
 
 .level-4.open>a {
