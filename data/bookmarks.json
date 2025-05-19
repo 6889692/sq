@@ -224,7 +224,7 @@
                   }
                 ],
                 "dateAdded": 1747569763329,
-                "dateGroupModified": 1747623008975,
+                "dateGroupModified": 1747647146610,
                 "id": "5259",
                 "index": 1,
                 "parentId": "5219",
@@ -233,7 +233,7 @@
               },
               {
                 "dateAdded": 1423571553780,
-                "dateLastUsed": 1747580015880,
+                "dateLastUsed": 1747647144532,
                 "id": "1599",
                 "index": 2,
                 "parentId": "5219",
@@ -666,10 +666,19 @@
                 "syncing": true,
                 "title": "IDX@Google",
                 "url": "https://idx.google.com/idx-66420639"
+              },
+              {
+                "dateAdded": 1747647146610,
+                "id": "5302",
+                "index": 29,
+                "parentId": "2124",
+                "syncing": true,
+                "title": "Google",
+                "url": "https://www.google.com/"
               }
             ],
             "dateAdded": 1728288965305,
-            "dateGroupModified": 1747322585027,
+            "dateGroupModified": 1747647151947,
             "id": "2124",
             "index": 1,
             "parentId": "1",
