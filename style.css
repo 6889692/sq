@@ -58,9 +58,6 @@ ul.search-results {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 400;
 }
 
 .top-bar-content {
@@ -204,7 +201,7 @@ ul.search-results {
     padding: 10px 40px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     position: sticky;
-    top: 54px;
+    top: 0;
     z-index: 100;
 }
 
@@ -214,7 +211,7 @@ ul.search-results {
     font-weight: bold;
     padding: 10px 40px;
     position: sticky;
-    top: 54px;
+    top: 0;
     z-index: 200;
 }
 
@@ -224,7 +221,7 @@ ul.search-results {
     font-weight: bold;
     padding: 9px 40px;
     position: sticky;
-    top: 54px;
+    top: 0;
     z-index: 300;
 }
 
