@@ -270,7 +270,7 @@ ul.search-results {
 }
 
 .level-3.open>a {
-    background-color: #ffb75a;
+    background-color: #ffc107;
     color: #fff;
     font-weight: bold;
     padding: 10px 40px;
@@ -318,61 +318,37 @@ a.bookmark-link:hover {
 }
     /* 复制按钮 */
 /* 文本样式 */
-.bookmark-link {
-  color: #007bff;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  
-}
-
-.bookmark-link:hover {
-  text-decoration: underline;
-}
-
-/* data:text 样式 */
+/* 网页版展示的样式 */
 .bookmark-data-item {
-  gap: 6px;
-  cursor: default;
-  padding: 10px 10px;
-  border-bottom: 0.5px solid #bbb;
-  white-space: nowrap;  /*强制span不换行*/
-  overflow: hidden;  /*超出宽度部分隐藏*/
-}
-.bookmark-data-item:hover {
-    background-color: #99d3fd;
-    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    background-color: #fffbe6;
+    border-left: 4px solid #ffc107;
+    padding: 6px 12px;
+    gap: 8px;
+    font-style: italic;
+    border-bottom: 0.5px solid #ffb75a;
+	cursor: text;
 }
 
-/* 图标：默认为✄，成功后短暂变 ✅ */
-.copy-symbol {
-  font-size: 16px;
-  color: #999;
-  transition: color 0.3s;
-  width: 16px;
-  height: 16px;
-  margin:10px;
+.bookmark-data-item .copy-symbol {
+    cursor: pointer;
+    font-size: 1.1em;
+	cursor: text;
+}
+
+.bookmark-data-item .copyable {
+    color: #333;
+    cursor: pointer;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+	cursor: text;
 }
 
 .bookmark-data-item.copied .copy-symbol {
-  color: #4CAF50;
+    color: green;
 }
 
-/* 可点击文本样式（非链接，但像链接） */
-.copyable {
-  color: #222;
-  font-size: 14px;
-  cursor: text; /* 显示为文本输入光标 */
-  user-select: none;
-}
 
-.copyable:hover {
-  color: #b94152;
-  font-size: 1.4em;
-}
-
-.bookmark-data-item.copied .copyable {
-  color: #4CAF50;
-  font-weight: bold;
-}
