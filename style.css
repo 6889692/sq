@@ -352,7 +352,7 @@ a.bookmark-link:hover {
   transition: color 0.3s;
   width: 16px;
   height: 16px;
-  margin-right:10px;
+  margin:0 10px;
 }
 
 .bookmark-data-item.copied .copy-symbol {
