@@ -312,7 +312,7 @@ a.bookmark-link:hover {
 .favicon-icon {
     width: 16px;
     height: 16px;
-    margin-right: 20px;
+    margin-right: 10px;
     vertical-align: middle;
     /* 垂直居中 */
 }
@@ -352,7 +352,7 @@ a.bookmark-link:hover {
   transition: color 0.3s;
   width: 16px;
   height: 16px;
-  margin:0 20px;
+  margin-right:10px;
 }
 
 .bookmark-data-item.copied .copy-symbol {
