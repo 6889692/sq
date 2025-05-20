@@ -223,11 +223,7 @@ ul.search-results {
     border-bottom: 0.5px solid #bbb;
     font-size: 1.4rem;
     color: #333;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    position: sticky;
-    top: 0;
 }
-   
 
 .level-2>a.menu-item:hover {
     background-color: #99d3fd;
@@ -236,7 +232,7 @@ ul.search-results {
 
 /* 三级菜单样式保持不变 */
 .level-3>a.menu-item {
-    padding: 10px 30px;
+    padding: 8px 30px;
     margin: 1px auto;
     background-color: #ddd;
     font-size: 1.2rem;
@@ -266,26 +262,30 @@ ul.search-results {
 .level-2.open>a {
     background-color: #b94152;
     color: #fff;
-    padding: 10px 30px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-.level-3.open>a {
-    background-color: #ffc25a;
-    color: #fff;
-    padding: 10px 30px;
+    font-weight: bold;
+    padding: 10px 40px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     position: sticky;
     top: 0;
 }
 
-.level-4.open>a {
-    background-color: #ffc25a;
+.level-3.open>a {
+    background-color: #ffb75a;
     color: #fff;
-    padding: 10px 30px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+    padding: 10px 40px;
+    z-index: 20;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.level-4.open>a {
+    background-color: #755aff;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 40px;
+    z-index: 30;
     position: sticky;
     top: 0;
 }
@@ -317,7 +317,7 @@ a.bookmark-link:hover {
     /* 垂直居中 */
 }
     /* 复制按钮 */
-/* 普通链接样式 */
+/* 文本样式 */
 .bookmark-link {
   color: #007bff;
   text-decoration: none;
@@ -335,7 +335,7 @@ a.bookmark-link:hover {
 .bookmark-data-item {
   gap: 6px;
   cursor: default;
-  padding: 10px 0px;
+  padding: 10px 10px;
   border-bottom: 0.5px solid #bbb;
   white-space: nowrap;  /*强制span不换行*/
   overflow: hidden;  /*超出宽度部分隐藏*/
@@ -352,7 +352,7 @@ a.bookmark-link:hover {
   transition: color 0.3s;
   width: 16px;
   height: 16px;
-  margin:0 10px;
+  margin:10px;
 }
 
 .bookmark-data-item.copied .copy-symbol {
