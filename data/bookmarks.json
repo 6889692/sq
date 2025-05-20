@@ -34,10 +34,20 @@
                     "syncing": true,
                     "title": "python -m http.server 8000",
                     "url": "data:text/plain;charset=utf-8,python%20-m%20http.server%208000"
+                  },
+                  {
+                    "dateAdded": 1747730944851,
+                    "dateLastUsed": 1747730967400,
+                    "id": "5310",
+                    "index": 3,
+                    "parentId": "5259",
+                    "syncing": true,
+                    "title": "python -m http.server 8000",
+                    "url": "data:text/plain;charset=utf-8,python%20-m%20http.server%208000"
                   }
                 ],
                 "dateAdded": 1747569763329,
-                "dateGroupModified": 1747719007679,
+                "dateGroupModified": 1747730953378,
                 "id": "5259",
                 "index": 0,
                 "parentId": "5219",
@@ -5805,9 +5815,20 @@
         "title": "书签栏"
       },
       {
-        "children": [],
+        "children": [
+          {
+            "children": [],
+            "dateAdded": 1747730944847,
+            "dateGroupModified": 1747730944851,
+            "id": "5309",
+            "index": 0,
+            "parentId": "2",
+            "syncing": true,
+            "title": "📌摘录"
+          }
+        ],
         "dateAdded": 1707645589983,
-        "dateGroupModified": 1747718983144,
+        "dateGroupModified": 1747730944847,
         "folderType": "other",
         "id": "2",
         "index": 1,
@@ -5816,7 +5837,7 @@
         "title": "其他书签"
       }
     ],
-    "dateAdded": 1747716120200,
+    "dateAdded": 1747722136087,
     "id": "0",
     "syncing": false,
     "title": ""
