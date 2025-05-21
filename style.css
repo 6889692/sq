@@ -89,12 +89,10 @@ ul.search-results {
 		  .top-bar.searching {
     position: relative; /* 关键点：创建新定位上下文 */
   }
-
-  /* 搜索框精准定位 */
   .searching .search-box {
     position: absolute;
     left: 50px; /* 等于logo宽度 */
-    width: calc(100vw - 50px - 20px); /* 视窗宽度 - logo - 右边距 */
+    width:auto;
     top: 10px;
     z-index: 100;
   }
