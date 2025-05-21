@@ -86,20 +86,19 @@ ul.search-results {
 @media (max-width: 480px) {
     .top-bar.searching .top-bar-content .top-bar-title span {
         display: none !important;        /* 使用 !important */
-	/* 强制限制宽度 */
-    width: 100vw; /* 视窗宽度 */
-    max-width: 100%;
-    box-sizing: border-box;
-    /* 调整位置 */
-    position: fixed;
-    left: 0;
-    top: 60px; /* 与顶部栏高度一致 */
-    /* 视觉优化 */
-    border-radius: 0;
-    padding: 12px 16px;
-    z-index: 1000;
+		  .top-bar.searching {
+    position: relative; /* 关键点：创建新定位上下文 */
+  }
+
+  /* 搜索框精准定位 */
+  .searching .search-box {
+    position: absolute;
+    left: 50px; /* 等于logo宽度 */
+    width: calc(100vw - 50px - 20px); /* 视窗宽度 - logo - 右边距 */
+    top: 10px;
+    z-index: 100;
+  }
     }
-	
 }
 
 .search-container {
