@@ -85,9 +85,21 @@ ul.search-results {
 
 @media (max-width: 480px) {
     .top-bar.searching .top-bar-content .top-bar-title span {
-        display: none !important;
-        /* 使用 !important */
+        display: none !important;        /* 使用 !important */
+	/* 强制限制宽度 */
+    width: 100vw; /* 视窗宽度 */
+    max-width: 100%;
+    box-sizing: border-box;
+    /* 调整位置 */
+    position: fixed;
+    left: 0;
+    top: 60px; /* 与顶部栏高度一致 */
+    /* 视觉优化 */
+    border-radius: 0;
+    padding: 12px 16px;
+    z-index: 1000;
     }
+	
 }
 
 .search-container {
