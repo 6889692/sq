@@ -7,7 +7,7 @@
 html {
     margin: 0;
     padding: 0;
-    background-image: url(data/bd.jpg);
+    background-image: url(bd.jpg);
     background-attachment: fixed;
 }
 
@@ -89,10 +89,12 @@ ul.search-results {
 		  .top-bar.searching {
     position: relative; /* 关键点：创建新定位上下文 */
   }
+
+  /* 搜索框精准定位 */
   .searching .search-box {
     position: absolute;
-    left: 50px; /* 等于logo宽度 */
-    width:auto;
+    left: 0px; /* 等于logo宽度 */
+    width: auto;
     top: 10px;
     z-index: 100;
   }
