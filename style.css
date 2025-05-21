@@ -246,6 +246,9 @@ a.bookmark-link {
     text-decoration: none;
     padding: 4px 8px;
     gap: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 a.bookmark-link:hover {
@@ -263,10 +266,9 @@ a.bookmark-link:hover {
     vertical-align: middle;
     /* 垂直居中 */
 }
-    /* 复制按钮 */
-/* 文本样式 */
-/* 网页版展示的样式 */
-.bookmark-data-item {
+   
+   /* 文本复制样式 */
+.bookmark-data-item { 
     display: flex;
     align-items: center;
     background-color: #fffbe6;
@@ -288,10 +290,10 @@ a.bookmark-link:hover {
     color: #333;
     cursor: pointer;
     flex-grow: 1;
+	cursor: text;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-	cursor: text;
 }
 
 .bookmark-data-item.copied .copy-symbol {
