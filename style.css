@@ -118,26 +118,27 @@ ul.search-results {
 
 /* 底部功能栏 - 保持与一级菜单相同样式 */
 .bottom-bar {
-    background-color: #333;
-    color: #ddd;
-    font-size: 1.2rem;
-    padding: 10px 30px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #ddd;
 }
 
 .bottom-bar button {
     background: none;
     border: none;
     color: inherit;
-    font-size: inherit;
+    font-size: 1rem;
     cursor: pointer;
-    padding: 5px 10px;
+    padding: 8px 16px;
     border-radius: 4px;
+    transition: background-color 0.2s;
 }
 
 .bottom-bar button:hover {
-    background-color: #444;
+    background-color: #4CAF50;
 }
 
 /* 隐藏一级菜单栏但保留其子菜单 */

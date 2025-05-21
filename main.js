@@ -155,8 +155,9 @@ function setupFolderClick(e) {
   } else {
     li.classList.add("open");
     const liTop = li.getBoundingClientRect().top + window.scrollY;
+    const desiredOffset = 0; // 将此值调整为您想要的距离（像素）
     window.scrollTo({
-      top: liTop,
+      top: liTop - desiredOffset, // 减去偏移量，使其在屏幕上向下一点
       behavior: "smooth"
     });
     let parent = li.parentElement;
@@ -239,41 +240,83 @@ searchBox.addEventListener("input", () => {
 
 // ✅ 页面加载时自动尝试加载远程书签
 window.addEventListener("DOMContentLoaded", async () => {
-  const url = "data/bookmarks.json";
+  // 从URL参数获取数据路径
+  const urlParams = new URLSearchParams(window.location.search);
+  const dataUrl = urlParams.get('data') || "data/bookmarks.json";
+  
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("获取失败");
-
-    const json = await res.json();
-    rawJSON = JSON.stringify(json, null, 2);
-
-    const children = json?.[0]?.children?.[0]?.children || [];
-    bookmarkTree.innerHTML = "";
-    children.forEach(child => {
-      const el = createBookmarkList(child, 2);
-      if (el) bookmarkTree.appendChild(el);
+    // 使用统一的loadBookmarks函数加载数据
+    await loadBookmarks(dataUrl);
+    
+    // 点击 logo 清除搜索状态
+    topBarTitle.addEventListener("click", () => {
+      searchBox.value = "";
+      searchBox.style.display = "none";
+      searchIcon.style.display = "block";
+      topBar.classList.remove("searching");
+      titleText.style.display = window.innerWidth <= 480 ? "inline" : "inline";
+      bookmarkTree.innerHTML = originalBookmarkTreeHTML;
+      bindFolderClickEvents("topBarTitle click");
     });
-
-    allNodes = flattenNodes(children, 2);
-    originalBookmarkTreeHTML = bookmarkTree.innerHTML;
-    bindFolderClickEvents("DOMContentLoaded");
-    observeBookmarkTree(); // 开始观察
   } catch (e) {
-    alert("⚠️ 无法从 GitHub 加载书签，您可以点击“导入书签”手动上传。");
+    alert(`⚠️ 无法加载书签: ${e.message}\n您可以点击"导入书签"手动上传。`);
   }
-
-  // 点击 logo 清除搜索状态
-  topBarTitle.addEventListener("click", () => {
-    searchBox.value = "";
-    searchBox.style.display = "none";
-    searchIcon.style.display = "block";
-    topBar.classList.remove("searching");
-    titleText.style.display = window.innerWidth <= 480 ? "inline" : "inline";
-    bookmarkTree.innerHTML = originalBookmarkTreeHTML;
-    bindFolderClickEvents("topBarTitle click");
-  });
 });
 
+// 添加"加载"按钮功能
+const loadBtn = document.getElementById("load-btn");
+
+// loadBtn事件处理
+loadBtn.addEventListener("click", async () => {
+    const defaultPath = "bookmarks.json";
+    const input = prompt("请输入文件名（如 bookmarks.json）或完整URL", defaultPath);
+    
+    if (!input) return;
+    
+    try {
+        const finalUrl = input.startsWith('http') ? input : `data/${input}`;
+        await loadBookmarks(finalUrl);
+    } catch (e) {
+        alert(`加载失败：${e.message}`);
+    }
+});
+
+// 修改后的loadBookmarks函数
+async function loadBookmarks(url) {
+    // 确保本地路径始终以data/开头（除非是远程URL）
+    const processedUrl = url.startsWith('http') ? url : 
+                       url.startsWith('data/') ? url : `data/${url}`;
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("获取失败");
+
+        const json = await res.json();
+        rawJSON = JSON.stringify(json, null, 2);
+
+        const children = json?.[0]?.children?.[0]?.children || [];
+        bookmarkTree.innerHTML = "";
+        children.forEach(child => {
+            const el = createBookmarkList(child, 2);
+            if (el) bookmarkTree.appendChild(el);
+        });
+
+        allNodes = flattenNodes(children, 2);
+        originalBookmarkTreeHTML = bookmarkTree.innerHTML;
+        bindFolderClickEvents("DOMContentLoaded");
+        observeBookmarkTree();
+        
+        // 更新URL参数但不刷新页面
+        const newUrl = new URL(window.location);
+        if (url !== "data/bookmarks.json") {
+            newUrl.searchParams.set('data', url);
+        } else {
+            newUrl.searchParams.delete('data');
+        }
+        window.history.pushState({}, '', newUrl);
+    } catch (e) {
+        alert(`⚠️ 无法加载书签: ${e.message}`);
+    }
+}
 // ✅ 点击 "导入" 按钮显示弹窗
 importBtn.addEventListener("click", () => {
   importModal.style.display = "block";
